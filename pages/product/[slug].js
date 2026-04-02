@@ -244,10 +244,17 @@ export default function ProductDetail({ product, slug }) {
 
 export async function getStaticPaths() {
   const slugs = Object.keys(productsData);
+  const locales = ['en', 'zh', 'id'];
   
-  const paths = slugs.map((slug) => ({
-    params: { slug },
-  }));
+  const paths = [];
+  for (const slug of slugs) {
+    for (const locale of locales) {
+      paths.push({
+        params: { slug },
+        locale,
+      });
+    }
+  }
 
   return {
     paths,

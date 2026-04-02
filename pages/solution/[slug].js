@@ -79,17 +79,30 @@ export default function SolutionDetail({ slug }) {
 }
 
 export async function getStaticPaths() {
+  const slugs = [
+    'biomass-pellet-line',
+    'wood-pellet-mill-production-line',
+    'straw-pelletizing-production-line',
+    'biomass-fuel-pellet-production-with-rice-husk',
+    'palm-efb-pellet-production-line',
+    'plywood-waste-pellet-making-solution',
+    'sawdust-pellets-production-line',
+  ];
+  const locales = ['en', 'zh', 'id'];
+  
+  const paths = [];
+  for (const slug of slugs) {
+    for (const locale of locales) {
+      paths.push({
+        params: { slug },
+        locale,
+      });
+    }
+  }
+
   return {
-    paths: [
-      { params: { slug: 'biomass-pellet-line' } },
-      { params: { slug: 'wood-pellet-mill-production-line' } },
-      { params: { slug: 'straw-pelletizing-production-line' } },
-      { params: { slug: 'biomass-fuel-pellet-production-with-rice-husk' } },
-      { params: { slug: 'palm-efb-pellet-production-line' } },
-      { params: { slug: 'plywood-waste-pellet-making-solution' } },
-      { params: { slug: 'sawdust-pellets-production-line' } },
-    ],
-    fallback: false
+    paths,
+    fallback: false,
   };
 }
 
