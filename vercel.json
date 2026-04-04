@@ -3,4 +3,4 @@
   "installCommand": "npm install",
   "framework": "nextjs",
   "outputDirectory": ".next"
-}
+}// Force rebuild Sat Apr  4 14:56:15 CST 2026
