@@ -2,11 +2,12 @@ import Head from 'next/head';
 import Link from 'next/link';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import FloatingSocial from '../components/FloatingSocial';
 import { translations } from '../lib/content';
 import { seoConfig } from '../lib/seo';
+import { useState } from 'react';
 
 export default function Home() {
+  const [activeFaq, setActiveFaq] = useState(null);
   const t = translations.en;
   const hero = t.hero;
   const materials = t.materials;
@@ -285,7 +286,18 @@ export default function Home() {
             <h2>{faq.title}</h2>
             <div className="faq-list">
               {faq.items.map((item, idx) => (
-                <button key={idx} className="faq-item">{item}</button>
+                <div key={idx} className={`faq-item ${activeFaq === idx ? 'active' : ''}`}>
+                  <button 
+                    className="faq-question" 
+                    onClick={() => setActiveFaq(activeFaq === idx ? null : idx)}
+                  >
+                    <span>{item.question}</span>
+                    <span className="faq-icon">{activeFaq === idx ? '−' : '+'}</span>
+                  </button>
+                  <div className="faq-answer">
+                    <p>{item.answer}</p>
+                  </div>
+                </div>
               ))}
             </div>
           </div>
@@ -294,39 +306,51 @@ export default function Home() {
         {/* Contact Section */}
         <section className="contact-section">
           <div className="container">
+            <div className="contact-titles">
+              <h2>{contact.title}</h2>
+              <h2>{form.title}</h2>
+            </div>
             <div className="contact-grid">
               <div className="contact-info">
-                <h2>{contact.title}</h2>
-                <div className="contact-item">
-                  <h3>WhatsApp</h3>
-                  <a href={contact.whatsappLink}>{contact.whatsapp}</a>
-                </div>
-                <div className="contact-item">
-                  <h3>Email</h3>
-                  <a href={contact.emailLink}>{contact.email}</a>
-                </div>
-                <div className="contact-item">
-                  <h3>Phone</h3>
-                  <a href={contact.phoneLink}>{contact.phone}</a>
-                </div>
-                <div className="contact-social">
-                  {contact.social.map((item, idx) => (
-                    <a key={idx} href={item.href} target="_blank" rel="noopener noreferrer">{item.name}</a>
-                  ))}
+                <div className="contact-methods">
+                  <div className="contact-block">
+                    <div className="contact-label">WhatsApp</div>
+                    <a href={contact.whatsappLink}>+86-18615207548</a>
+                  </div>
+                  <div className="contact-block">
+                    <div className="contact-label">Email</div>
+                    <a href={contact.emailLink}>pellet@macreat.com</a>
+                  </div>
+                  <div className="contact-block">
+                    <div className="contact-label">Phone</div>
+                    <a href={contact.phoneLink}>+86-18615207548</a>
+                  </div>
                 </div>
               </div>
               <div className="contact-form" id="message">
-                <h2>{form.title}</h2>
-                <form action="/api/contact" method="POST">
-                  <div className="form-row">
-                    <input type="text" name="name" placeholder={form.fields[0].placeholder} required />
-                    <input type="email" name="email" placeholder={form.fields[1].placeholder} required />
+                <form action="/api/contact" method="POST" className="quote-form">
+                  <div className="form-grid">
+                    <div className="form-group">
+                      <label>{form.fields[0].placeholder}</label>
+                      <input type="text" name="name" required />
+                    </div>
+                    <div className="form-group">
+                      <label>{form.fields[1].placeholder}</label>
+                      <input type="email" name="email" required />
+                    </div>
+                    <div className="form-group">
+                      <label>{form.fields[2].placeholder}</label>
+                      <input type="text" name="phone" required />
+                    </div>
+                    <div className="form-group">
+                      <label>{form.fields[3].placeholder}</label>
+                      <input type="text" name="country" required />
+                    </div>
                   </div>
-                  <div className="form-row">
-                    <input type="text" name="phone" placeholder={form.fields[2].placeholder} required />
-                    <input type="text" name="country" placeholder={form.fields[3].placeholder} required />
+                  <div className="form-group form-group-full">
+                    <label>{form.messagePlaceholder}</label>
+                    <textarea name="message" rows="4" required></textarea>
                   </div>
-                  <textarea name="message" placeholder={form.messagePlaceholder} required></textarea>
                   <button type="submit" className="btn btn-primary">{form.button}</button>
                 </form>
               </div>
@@ -335,7 +359,6 @@ export default function Home() {
         </section>
       </main>
 
-      <FloatingSocial />
       <Footer />
     </>
   );
