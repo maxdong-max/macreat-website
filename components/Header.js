@@ -1,16 +1,17 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Menu, X, Globe, Search, MessageCircle, Mail, Facebook, Twitter, Youtube, Instagram } from 'lucide-react';
+import { Menu, X, Globe, Search, MessageCircle, Mail, Video, ExternalLink } from 'lucide-react';
 import { translations } from '../lib/content';
 
-const socialIcons = {
+// Map social icons - use alternatives for missing icons
+const socialIconMap = {
   whatsapp: MessageCircle,
   email: Mail,
-  facebook: Facebook,
-  'x (twitter)': Twitter,
-  youtube: Youtube,
-  instagram: Instagram
+  facebook: ExternalLink,  // Alternative: Globe, User
+  'x (twitter)': X,  // X icon exists
+  youtube: Video,  // Alternative: FileVideo
+  instagram: ExternalLink  // Alternative: Image
 };
 
 export default function Header() {
@@ -33,7 +34,7 @@ export default function Header() {
             </div>
             <div className="header-social">
               {t.social.map((item, index) => {
-                const IconComponent = socialIcons[item.icon];
+                const IconComponent = socialIconMap[item.icon];
                 return (
                   <a 
                     key={index} 
