@@ -1,0 +1,312 @@
+<!-- AI Chat Widget - Embed in any page -->
+<div id="macreat-chat-widget" class="chat-widget-collapsed">
+  <button class="chat-toggle-btn" onclick="toggleChat()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+    </svg>
+    <span>Chat with us</span>
+  </button>
+  
+  <div class="chat-window">
+    <div class="chat-header">
+      <h3>💬 Macreat Support</h3>
+      <button onclick="toggleChat()">✕</button>
+    </div>
+    
+    <div class="chat-messages" id="chatMessages">
+      <div class="message assistant">
+        <p>Hello! Welcome to Macreat. How can I help you today?</p>
+      </div>
+    </div>
+    
+    <div class="chat-input">
+      <input type="text" id="chatInput" placeholder="Type your message..." onkeypress="handleChatKey(event)">
+      <button onclick="sendMessage()">Send</button>
+    </div>
+    
+    <div class="chat-locale">
+      <select id="chatLocale" onchange="changeLocale()">
+        <option value="en">English</option>
+        <option value="zh">中文</option>
+        <option value="id">Indonesia</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<style>
+  .chat-widget-collapsed .chat-window {
+    display: none;
+  }
+  
+  .chat-widget-expanded .chat-toggle-btn {
+    display: none;
+  }
+  
+  .chat-widget-expanded .chat-window {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  #macreat-chat-widget {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 10000;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  
+  .chat-toggle-btn {
+    background: #25d366;
+    color: white;
+    border: none;
+    padding: 15px 20px;
+    border-radius: 30px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: transform 0.3s;
+  }
+  
+  .chat-toggle-btn:hover {
+    transform: scale(1.05);
+  }
+  
+  .chat-window {
+    width: 380px;
+    height: 500px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+    overflow: hidden;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+  }
+  
+  .chat-header {
+    background: #1a73e8;
+    color: white;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .chat-header h3 {
+    margin: 0;
+    font-size: 16px;
+  }
+  
+  .chat-header button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+  }
+  
+  .chat-messages {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .message {
+    max-width: 80%;
+    padding: 10px 15px;
+    border-radius: 15px;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  
+  .message.user {
+    background: #1a73e8;
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 2px;
+  }
+  
+  .message.assistant {
+    background: #f0f0f0;
+    color: #333;
+    align-self: flex-start;
+    border-bottom-left-radius: 2px;
+  }
+  
+  .message.typing {
+    background: #f0f0f0;
+    color: #666;
+  }
+  
+  .chat-input {
+    padding: 15px;
+    border-top: 1px solid #eee;
+    display: flex;
+    gap: 10px;
+  }
+  
+  .chat-input input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    outline: none;
+  }
+  
+  .chat-input input:focus {
+    border-color: #1a73e8;
+  }
+  
+  .chat-input button {
+    background: #1a73e8;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+  }
+  
+  .chat-locale {
+    padding: 0 15px 15px;
+  }
+  
+  .chat-locale select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 12px;
+  }
+  
+  @media (max-width: 420px) {
+    .chat-window {
+      width: calc(100vw - 40px);
+      height: calc(100vh - 120px);
+    }
+  }
+</style>
+
+<script>
+  const API_URL = window.location.origin + '/api';
+  let sessionId = null;
+  let locale = 'en';
+  
+  async function initChat() {
+    try {
+      const res = await fetch(API_URL + '/chat/start', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ locale })
+      });
+      const data = await res.json();
+      sessionId = data.sessionId;
+      
+      // Display initial messages
+      const messages = data.messages || [];
+      const chatContainer = document.getElementById('chatMessages');
+      chatContainer.innerHTML = '';
+      
+      for (const msg of messages) {
+        addMessage(msg.content, msg.role);
+      }
+    } catch (e) {
+      console.log('Chat initialization failed, using offline mode');
+    }
+  }
+  
+  function toggleChat() {
+    const widget = document.getElementById('macreat-chat-widget');
+    widget.classList.toggle('chat-widget-collapsed');
+    widget.classList.toggle('chat-widget-expanded');
+    
+    if (widget.classList.contains('chat-widget-expanded') && !sessionId) {
+      initChat();
+    }
+  }
+  
+  function addMessage(content, role) {
+    const chatContainer = document.getElementById('chatMessages');
+    const div = document.createElement('div');
+    div.className = `message ${role}`;
+    div.innerHTML = `<p>${escapeHtml(content)}</p>`;
+    chatContainer.appendChild(div);
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+  }
+  
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+  
+  async function sendMessage() {
+    const input = document.getElementById('chatInput');
+    const message = input.value.trim();
+    if (!message) return;
+    
+    // Add user message
+    addMessage(message, 'user');
+    input.value = '';
+    
+    // Show typing indicator
+    const chatContainer = document.getElementById('chatMessages');
+    const typingDiv = document.createElement('div');
+    typingDiv.className = 'message assistant typing';
+    typingDiv.innerHTML = '<p>Typing...</p>';
+    chatContainer.appendChild(typingDiv);
+    
+    try {
+      const res = await fetch(API_URL + '/chat/message', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionId, message, locale })
+      });
+      
+      // Remove typing indicator
+      typingDiv.remove();
+      
+      if (res.ok) {
+        const data = await res.json();
+        // Add all messages from response
+        const newMessages = data.messages.slice(-2);
+        for (const msg of newMessages) {
+          if (msg.role === 'assistant') {
+            addMessage(msg.content, msg.role);
+          }
+        }
+      } else {
+        addMessage('Sorry, there was an error. Please try again.', 'assistant');
+      }
+    } catch (e) {
+      typingDiv.remove();
+      addMessage('Connection error. Please try again later.', 'assistant');
+    }
+  }
+  
+  function handleChatKey(event) {
+    if (event.key === 'Enter') {
+      sendMessage();
+    }
+  }
+  
+  function changeLocale() {
+    const select = document.getElementById('chatLocale');
+    locale = select.value;
+    sessionId = null; // Reset session for new locale
+    document.getElementById('chatMessages').innerHTML = '';
+    initChat();
+  }
+  
+  // Auto-init on page load
+  document.addEventListener('DOMContentLoaded', () => {
+    // Can auto-init here if desired
+  });
+</script>

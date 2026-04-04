@@ -1,0 +1,10 @@
+.vercel
+
+.next
+node_modules
+
+wp-content
+uploads
+
+macreat-upgrade
+~
