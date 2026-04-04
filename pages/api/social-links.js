@@ -1,28 +1,14 @@
 /**
- * 公开社交链接 API - 从数据库获取
+ * 公开社交链接 API (Vercel兼容版本)
  */
-import path from 'path';
-import fs from 'fs';
-import sqlite3 from 'sqlite3';
-
-const dbPath = path.join(process.cwd(), 'data', 'admin.db');
-
 export default async function handler(req, res) {
-  if (req.method !== 'GET') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
+  const socialLinks = [
+    { icon: 'whatsapp', name: 'WhatsApp', href: 'https://wa.me/1234567890' },
+    { icon: 'email', name: 'Email', href: 'mailto:info@macreat.com' },
+    { icon: 'facebook', name: 'Facebook', href: 'https://facebook.com/macreat' },
+    { icon: 'instagram', name: 'Instagram', href: 'https://instagram.com/macreat' },
+    { icon: 'youtube', name: 'YouTube', href: 'https://youtube.com/macreat' }
+  ];
   
-  try {
-    if (!fs.existsSync(dbPath)) {
-      return res.status(200).json([]);
-    }
-    
-    const db = new (dbPath);
-    const items = db.prepare('SELECT * FROM social_links WHERE enabled = 1 ORDER BY sort_order').all();
-    db.close();
-    
-    return res.status(200).json(items);
-  } catch (error) {
-    return res.status(500).json({ error: error.message });
-  }
+  return res.status(200).json(socialLinks);
 }

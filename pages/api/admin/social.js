@@ -1,18 +1,17 @@
 /**
- * 社交链接管理 API
+ * 社交链接管理 API (Vercel兼容版本)
  */
 import jwt from 'jsonwebtoken';
-import path from 'path';
-import fs from 'fs';
-import sqlite3 from 'sqlite3';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'macreat-admin-secret-2024';
-const dbPath = path.join(process.cwd(), 'data', 'admin.db');
 
-function getDb() {
-  if (!fs.existsSync(dbPath)) return null;
-  return new sqlite3.Database(dbPath);
-}
+// 内存存储
+let socialLinks = [
+  { id: 1, icon: 'whatsapp', name: 'WhatsApp', href: 'https://wa.me/1234567890' },
+  { id: 2, icon: 'email', name: 'Email', href: 'mailto:info@macreat.com' }
+];
+
+let nextId = 3;
 
 function authMiddleware(req) {
   const token = req.headers.authorization?.split(' ')[1];
@@ -29,51 +28,16 @@ export default async function handler(req, res) {
   const { method } = req;
   
   if (method === 'GET') {
-    const db = getDb();
-    if (!db) return res.status(200).json([]);
-    
-    const auth = authMiddleware(req);
-    if (auth.error) return res.status(auth.status).json({ error: auth.error });
-    
-    const items = db.prepare('SELECT * FROM social_links ORDER BY sort_order').all();
-    db.close();
-    return res.status(200).json(items);
+    return res.status(200).json(socialLinks);
   }
   
   if (method === 'POST') {
-    const db = getDb();
-    if (!db) return res.status(500).json({ error: '数据库未初始化' });
-    
     const auth = authMiddleware(req);
     if (auth.error) return res.status(auth.status).json({ error: auth.error });
     
-    try {
-      const { name, icon, href, enabled, position, sort_order } = req.body;
-      const result = db.prepare('INSERT INTO social_links (name, icon, href, enabled, position, sort_order) VALUES (?, ?, ?, ?, ?, ?)').run(name, icon, href, enabled ? 1 : 0, position, sort_order || 0);
-      db.close();
-      return res.status(200).json({ id: result.lastInsertRowid, success: true });
-    } catch (error) {
-      db.close();
-      return res.status(500).json({ error: error.message });
-    }
-  }
-  
-  if (method === 'PUT') {
-    const db = getDb();
-    if (!db) return res.status(500).json({ error: '数据库未初始化' });
-    
-    const auth = authMiddleware(req);
-    if (auth.error) return res.status(auth.status).json({ error: auth.error });
-    
-    try {
-      const { id, name, icon, href, enabled, position, sort_order } = req.body;
-      db.prepare('UPDATE social_links SET name = ?, icon = ?, href = ?, enabled = ?, position = ?, sort_order = ? WHERE id = ?').run(name, icon, href, enabled ? 1 : 0, position, sort_order, id);
-      db.close();
-      return res.status(200).json({ success: true });
-    } catch (error) {
-      db.close();
-      return res.status(500).json({ error: error.message });
-    }
+    const { icon, name, href } = req.body;
+    socialLinks.push({ id: nextId++, icon, name, href });
+    return res.status(200).json({ success: true });
   }
   
   return res.status(405).json({ error: 'Method not allowed' });
