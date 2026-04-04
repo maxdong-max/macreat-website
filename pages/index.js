@@ -315,7 +315,7 @@ export default function Home() {
                 <div className="contact-methods">
                   <div className="contact-block">
                     <div className="contact-label">WhatsApp</div>
-                    <a href={contact.whatsappLink}>+86-18615207548</a>
+                    <a href={contact.whatsappLink}>{contact.whatsapp}</a>
                   </div>
                   <div className="contact-block">
                     <div className="contact-label">Email</div>
@@ -323,7 +323,7 @@ export default function Home() {
                   </div>
                   <div className="contact-block">
                     <div className="contact-label">Phone</div>
-                    <a href={contact.phoneLink}>+86-18615207548</a>
+                    <a href={contact.phoneLink}>{contact.phone}</a>
                   </div>
                 </div>
               </div>

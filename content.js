@@ -199,12 +199,12 @@ export const siteContent = {
   // Contact Section
   contact: {
     title: 'Get In Touch !',
-    whatsapp: '+86-18615207548',
+    whatsapp: '+86-15207548',
     whatsappLink: 'https://api.whatsapp.com/send?phone=8618615207548',
     email: 'pellet@macreat.com',
     emailLink: 'mailto:pellet@macreat.com',
-    phone: '+86-18615207548',
-    phoneLink: 'tel:+86-18615207548',
+    phone: '+86-15207548',
+    phoneLink: 'tel:+86-15207548',
     social: [
       { name: 'Facebook', href: 'https://www.facebook.com/macreatpellet' },
       { name: 'Twitter', href: 'https://twitter.com/macreatmachine' },
