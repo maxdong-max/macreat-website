@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://macreat.com/sitemap.xml
+Sitemap: https://workspace-shrimp-publish.vercel.app/sitemap.xml
