@@ -3,7 +3,7 @@
  */
 import path from 'path';
 import fs from 'fs';
-import { createClient } from '@libsql/client';
+import sqlite3 from 'sqlite3';
 
 const dbPath = path.join(process.cwd(), 'data', 'admin.db');
 

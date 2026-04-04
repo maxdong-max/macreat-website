@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import path from 'path';
 import fs from 'fs';
-import { createClient } from '@libsql/client';
+import sqlite3 from 'sqlite3';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'macreat-admin-secret-2024';
 
