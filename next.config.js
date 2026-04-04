@@ -8,14 +8,15 @@ const nextConfig = {
   images: {
     domains: ['macreat.com', 'your-cdn.vercel.app'],
   },
-  async rewrites() {
-    return [
-      {
-        source: '/api/:path*',
-        destination: 'https://your-railway-app.up.railway.app/api/:path*',
-      },
-    ];
-  },
+  // API rewrites disabled - Railway backend may not be available
+  // async rewrites() {
+  //   return [
+  //     {
+  //       source: '/api/:path*',
+  //       destination: 'https://your-railway-app.up.railway.app/api/:path*',
+  //     },
+  //   ];
+  // },
 };
 
 module.exports = nextConfig;
