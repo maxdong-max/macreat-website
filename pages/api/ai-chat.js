@@ -4,7 +4,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import path from 'path';
 import fs from 'fs';
-import Database from 'sqlite3';
+import { createClient } from '@libsql/client';
 
 const dbPath = path.join(process.cwd(), 'data', 'admin.db');
 
@@ -14,7 +14,7 @@ function ensureDb() {
     fs.mkdirSync(dataDir, { recursive: true });
   }
   
-  const db = new Database(dbPath);
+  const db = new (dbPath);
   db.exec(`
     CREATE TABLE IF NOT EXISTS ai_chats (
       id INTEGER PRIMARY KEY AUTOINCREMENT,

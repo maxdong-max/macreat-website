@@ -4,14 +4,14 @@
 import jwt from 'jsonwebtoken';
 import path from 'path';
 import fs from 'fs';
-import Database from 'sqlite3';
+import { createClient } from '@libsql/client';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'macreat-admin-secret-2024';
 const dbPath = path.join(process.cwd(), 'data', 'admin.db');
 
 function getDb() {
   if (!fs.existsSync(dbPath)) return null;
-  return new Database(dbPath);
+  return createClient({ url: 'file:' + dbPath });
 }
 
 function authMiddleware(req) {

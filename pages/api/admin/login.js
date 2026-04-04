@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import path from 'path';
 import fs from 'fs';
-import Database from 'sqlite3';
+import { createClient } from '@libsql/client';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'macreat-admin-secret-2024';
 
@@ -15,7 +15,7 @@ if (!fs.existsSync(dataDir)) {
 }
 
 const dbPath = path.join(dataDir, 'admin.db');
-const db = new Database(dbPath);
+const db = new (dbPath);
 
 db.exec(`
   CREATE TABLE IF NOT EXISTS users (

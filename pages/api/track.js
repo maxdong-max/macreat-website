@@ -3,7 +3,7 @@
  */
 import path from 'path';
 import fs from 'fs';
-import Database from 'sqlite3';
+import { createClient } from '@libsql/client';
 
 const dbPath = path.join(process.cwd(), 'data', 'admin.db');
 
@@ -13,7 +13,7 @@ function ensureAnalyticsDb() {
     fs.mkdirSync(dataDir, { recursive: true });
   }
   
-  const db = new Database(dbPath);
+  const db = new (dbPath);
   db.exec(`
     CREATE TABLE IF NOT EXISTS analytics (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -55,7 +55,7 @@ export default async function handler(req, res) {
       return res.status(200).json({ totalVisitors: 0, todayVisitors: 0 });
     }
     
-    const db = new Database(dbPath);
+    const db = new (dbPath);
     
     try {
       const totalVisitors = db.prepare(`SELECT COUNT(DISTINCT ip) as count FROM analytics WHERE timestamp > datetime('now', '-${days} days')`).get();

@@ -3,7 +3,7 @@
  */
 import path from 'path';
 import fs from 'fs';
-import Database from 'sqlite3';
+import { createClient } from '@libsql/client';
 
 const dbPath = path.join(process.cwd(), 'data', 'admin.db');
 
@@ -17,7 +17,7 @@ export default async function handler(req, res) {
       return res.status(200).json([]);
     }
     
-    const db = new Database(dbPath);
+    const db = new (dbPath);
     const items = db.prepare('SELECT * FROM social_links WHERE enabled = 1 ORDER BY sort_order').all();
     db.close();
     
