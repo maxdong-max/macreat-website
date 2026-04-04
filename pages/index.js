@@ -176,22 +176,7 @@ export default function Home() {
                 <Link href={about.ctaLink} className="btn btn-primary">{about.cta}</Link>
               </div>
               <div className="about-video">
-<<<<<<< HEAD
-                {about.videoUrl ? (
-                  <iframe
-                    src={about.videoUrl}
-                    title="Macreat Factory Video"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    style={{ width: '100%', height: '100%', borderRadius: '10px' }}
-                  />
-                ) : (
-                  <button className="play-btn">{about.videoAlt}</button>
-                )}
-=======
                 <button className="play-btn">{about.videoAlt}</button>
->>>>>>> fe52a4ece308cd8176a71aaada9c017f87615907
               </div>
             </div>
           </div>

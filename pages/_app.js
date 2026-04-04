@@ -1,10 +1,5 @@
 import '../styles/globals.css';
 import Script from 'next/script';
-<<<<<<< HEAD
-import AiChatWidget from '../components/AiChatWidget';
-import AnalyticsTracker from '../components/AnalyticsTracker';
-=======
->>>>>>> fe52a4ece308cd8176a71aaada9c017f87615907
 
 function MyApp({ Component, pageProps }) {
   return (
@@ -21,13 +16,7 @@ function MyApp({ Component, pageProps }) {
           gtag('config', 'GA_MEASUREMENT_ID');
         `}
       </Script>
-<<<<<<< HEAD
-      <AnalyticsTracker />
       <Component {...pageProps} />
-      <AiChatWidget />
-=======
-      <Component {...pageProps} />
->>>>>>> fe52a4ece308cd8176a71aaada9c017f87615907
     </>
   );
 }
