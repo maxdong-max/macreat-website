@@ -131,7 +131,7 @@ export const siteContent = {
     items: [
       { name: 'Biomass Pellet Machine LD700C', spec: 'LD700C 110-132kw 1.5-2T/H', href: '/product/biomass-pellet-machine/', image: 'pellet-machine-LD700C' },
       { name: 'Hydraulic Crusher LDZPH1300-600', spec: 'LDZPH 7.5KW 10-15T/H', href: '/product/hydraulic-crusher-ldzph1300-600/', image: 'Hydraulic-Crusher-LDZPH1300-600' },
-      { name: 'Drum Wood Chipper', spec: 'LDBX 55-710KW 6-60T/H', href: '/product/drum-wood-chipper/', image: '1-1-Drum-Wood-Chipper' },
+      { name: 'Drum Wood Chipper', spec: 'LDBX 55-710KW 6-60T/H', href: '/product/biomass-pellet-machine/', image: '1-1-Drum-Wood-Chipper' },
       { name: 'High Efficiency Hammer Mill', spec: 'GXP 55-250KW 1-60T/H', href: '/product/hammer-mill/', image: '2-3High-Efficiency-Hammer-Mill' },
       { name: 'Biomass Pellet Machine', spec: 'RH&RV 11-110KW 0.15-1.2T/H', href: '/product/pellet-mill-rh-and-rv-series/', image: 'biomass-pellet-maker-1' },
       { name: 'Cooler Machine', spec: 'LQC 7.5-30KW 1.5-12T/H', href: '/product/cooler-machine/', image: '2-1Cooler-Machine-' },
