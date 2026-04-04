@@ -4,7 +4,7 @@
 import jwt from 'jsonwebtoken';
 import path from 'path';
 import fs from 'fs';
-import Database from 'better-sqlite3';
+import Database from 'sqlite3';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'macreat-admin-secret-2024';
 const dbPath = path.join(process.cwd(), 'data', 'admin.db');
