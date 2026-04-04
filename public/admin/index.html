@@ -145,7 +145,7 @@
   </div>
 
   <script>
-    const API = 'https://workspace-shrimp-publish-aotk6x1bx-maxdong-maxs-projects.vercel.app';
+    const API = window.location.origin;
     let token = localStorage.getItem('adminToken');
     
     if (token) { showAdmin(); loadDashboard(); }
