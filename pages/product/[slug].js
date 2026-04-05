@@ -204,6 +204,112 @@ export default function ProductDetail({ product, slug }) {
           </div>
         </section>
 
+        {/* Flowchart Section */}
+        {product.images && product.images.flowchart && (
+          <section className="flowchart-section" style={{ padding: '60px 0', background: '#f9f9f9' }}>
+            <div className="container">
+              <h2>Flowchart of Animal Feed Production Plant</h2>
+              <p style={{ marginBottom: '30px' }}>{product.flow}</p>
+              <img 
+                src={product.images.flowchart} 
+                alt="Flowchart"
+                style={{ width: '100%', borderRadius: '16px' }}
+              />
+            </div>
+          </section>
+        )}
+
+        {/* Process Steps Section */}
+        {product.processSteps && product.processSteps.length > 0 && (
+          <section className="process-steps-section" style={{ padding: '60px 0' }}>
+            <div className="container">
+              <h2>Production Process</h2>
+              <div className="process-steps-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginTop: '30px' }}>
+                {product.processSteps.map((step, index) => (
+                  <div key={index} className="process-step-card" style={{ background: '#fff', padding: '25px', borderRadius: '16px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)', textAlign: 'center' }}>
+                    <div className="step-number" style={{ width: '40px', height: '40px', background: '#e67e22', color: '#fff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 15px', fontWeight: 'bold' }}>{index + 1}</div>
+                    <h3 style={{ fontSize: '18px', marginBottom: '10px' }}>{step.title}</h3>
+                    <p style={{ color: '#666', fontSize: '14px' }}>{step.description}</p>
+                    {step.equipment && (
+                      <p style={{ color: '#888', fontSize: '12px', marginTop: '10px', borderTop: '1px solid #eee', paddingTop: '10px' }}>
+                        <strong>Equipment:</strong> {step.equipment}
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* Advantages Section */}
+        {product.advantages && product.advantages.length > 0 && (
+          <section className="advantages-section" style={{ padding: '60px 0', background: '#f9f9f9' }}>
+            <div className="container">
+              <h2>Feed Mill Equipment Advantage</h2>
+              <div className="advantages-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px', marginTop: '30px' }}>
+                {product.advantages.map((adv, index) => (
+                  <div key={index} className="advantage-card" style={{ background: '#fff', padding: '20px', borderRadius: '16px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+                    <h3 style={{ fontSize: '16px', color: '#e67e22', marginBottom: '10px' }}>{adv.title}</h3>
+                    <p style={{ color: '#666', fontSize: '14px' }}>{adv.description}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* FAQ Section */}
+        {product.faq && product.faq.length > 0 && (
+          <section className="faq-section" style={{ padding: '60px 0' }}>
+            <div className="container">
+              <h2>FAQ</h2>
+              <div className="faq-list" style={{ marginTop: '30px' }}>
+                {product.faq.map((item, index) => (
+                  <div key={index} className="faq-item" style={{ background: '#fff', padding: '20px', borderRadius: '16px', marginBottom: '15px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+                    <h3 style={{ fontSize: '16px', color: '#333', marginBottom: '10px' }}>{item.q}</h3>
+                    <p style={{ color: '#666', fontSize: '14px' }}>{item.a}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* About Section */}
+        {product.about && (
+          <section className="about-section" style={{ padding: '60px 0', background: '#f9f9f9' }}>
+            <div className="container">
+              <h2>{product.about.title}</h2>
+              <p style={{ marginTop: '20px', color: '#666' }}>{product.about.description}</p>
+            </div>
+          </section>
+        )}
+
+        {/* Why Choose Section */}
+        {product.whyChoose && product.whyChoose.length > 0 && (
+          <section className="why-choose-section" style={{ padding: '60px 0' }}>
+            <div className="container">
+              <h2>Why Choose Macreat?</h2>
+              <div className="why-choose-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px', marginTop: '30px' }}>
+                {product.whyChoose.map((item, index) => (
+                  <div key={index} className="why-choose-card" style={{ background: '#fff', padding: '20px', borderRadius: '16px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)', textAlign: 'center' }}>
+                    {item.image && (
+                      <img 
+                        src={item.image} 
+                        alt={item.title}
+                        style={{ width: '60px', height: '60px', objectFit: 'contain', marginBottom: '15px' }}
+                      />
+                    )}
+                    <h3 style={{ fontSize: '16px', marginBottom: '10px' }}>{item.title}</h3>
+                    <p style={{ color: '#666', fontSize: '13px' }}>{item.description}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
         {/* Related Products */}
         <section className="related-products">
           <div className="container">

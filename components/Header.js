@@ -57,10 +57,19 @@ export default function Header() {
           </button>
           <ul className={`nav-links ${mobileMenuOpen ? 'open' : ''}`}>
             {t.links.map((link, index) => (
-              <li key={index}>
+              <li key={index} className={link.hasDropdown ? 'has-dropdown-item' : ''}>
                 <Link href={link.href} className={link.hasDropdown ? 'has-dropdown' : ''}>
                   {link.text}
                 </Link>
+                {link.dropdownItems && link.dropdownItems.length > 0 && (
+                  <ul className="dropdown-menu">
+                    {link.dropdownItems.map((item, idx) => (
+                      <li key={idx}>
+                        <Link href={item.href}>{item.text}</Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </li>
             ))}
           </ul>

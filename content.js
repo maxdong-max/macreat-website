@@ -99,10 +99,50 @@ export const siteContent = {
     items: [
       {
         title: 'Biomass Pellet Line',
-        description: 'Our biomass pellet line efficiently processes wood waste into high-quality fuel pellets. Ideal for wood processing plants, furniture factories, and biomass energy enterprises.',
+        subtitle: 'Pellet Mill Production Line',
+        description: 'This production line can process and granulate high-moisture biological raw materials.',
+        features: [
+          'High Capacity Pellet Production (10-100 T/H)',
+          'Fully Automatic Biomass Pellet Line',
+          'Multi-Material Pelletizing Technology',
+          'Clean and Safe Production Environment (ADC Concept)',
+          'Energy Efficiency & Low Labor Cost',
+          'Global Project Experience & On-Site Installation'
+        ],
+        description2: 'The overall production line consists of crushing section, grinding section, drying section, granulation section, cooling section, and packaging section. This production line can achieve fully automated operation, efficient and stable production, and reduce manual intervention.',
+        flow: 'Raw Material → 1. Crushing machine → 2. Drying machine → 3. Grinding machine → 4. Pelleting machine → 5. Cooling machine → 6. Packing machine → Pellets',
+        customerPlant: {
+          capacity: 'From 10T/h, to 100T/h, and even more',
+          features: [
+            'Fully Automatic Biomass Pellet Line',
+            'Advanced design on pellet line',
+            'Clean Production Site with ADC Concept',
+            'Multiple Materials Technology'
+          ],
+          materials: 'Palm Kernel Shell, Palm EFB, Agricultural straws, Wood waste, etc.'
+        },
+        product: {
+          name: 'Wood Chipper/Crusher LDBX218',
+          power: '110kw',
+          capacity: '8-10 Ton/Hour',
+          href: '/product/wood-chipper-crusher-ldbx218/'
+        },
+        faq: [
+          { q: 'Delivery time?', a: '8-10 working days for small machines, 15-20 for large machines.' },
+          { q: 'Can you provide parameters, price, layout drawing?', a: 'Yes, we can provide all parameters, price, layout drawing, factory design.' },
+          { q: 'Machine warranty?', a: 'Our machines are guaranteed for one year, excluding wearing parts.' }
+        ],
         machines: 'Drum Wood Chipper → Hammer Mill → Drying Machine → Pellet Mill → Cooling Machine → Packing Machine',
         technique: 'Wood Chipping → Crushing → Drying → Pelletizing → Cooling → Packing',
-        image: 'Biomass Pellet Line',
+        image: '/images/macreat/11-1.jpg',
+        images: {
+          overview: 'https://macreat.com/wp-content/uploads/2024/11/05-2英文.jpg',
+          features: 'https://macreat.com/wp-content/uploads/2024/11/05-1英文.jpg',
+          process: 'https://macreat.com/wp-content/uploads/2024/12/07-Granulation-Process-1.jpg',
+          customerPlant: 'https://macreat.com/wp-content/uploads/2024/12/07-Customer-plant-1.jpg',
+          product: 'https://macreat.com/wp-content/uploads/2024/12/07-Biomass-Pellet-Line.jpg',
+          productVideo: 'https://macreat.com/wp-content/uploads/2024/11/16-Wood-Chipper-Crusher-LDBX218-working-video-in-our-customers-factory.jpg'
+        },
         href: '/solution/biomass-pellet-line/'
       },
       {
