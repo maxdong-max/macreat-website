@@ -1,9 +1,29 @@
 import '../styles/globals.css';
 import Script from 'next/script';
+import Head from 'next/head';
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 
 function MyApp({ Component, pageProps }) {
+  const router = useRouter();
+  
+  useEffect(() => {
+    const handleRouteChange = (url) => {
+      // Refresh on route change to avoid cached images
+      window.location.reload();
+    };
+    
+    router.events.on('routeChangeComplete', handleRouteChange);
+    return () => router.events.off('routeChangeComplete', handleRouteChange);
+  }, []);
+
   return (
     <>
+      <Head>
+        <meta httpEquiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+        <meta httpEquiv="Pragma" content="no-cache" />
+        <meta httpEquiv="Expires" content="0" />
+      </Head>
       <Script
         src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"
         strategy="afterInteractive"

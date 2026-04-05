@@ -62,6 +62,38 @@ export const siteContent = {
     description: 'System Solutions: Delivering comprehensive, reliable, and professional biomass new energy and environmental protection equipment tailored to your needs.',
     items: [
       {
+        title: 'Biomass Pellet Line',
+        description: 'Our biomass pellet line efficiently processes wood waste into high-quality fuel pellets. Ideal for wood processing plants, furniture factories, and biomass energy enterprises.',
+        machines: 'Drum Wood Chipper → Hammer Mill → Drying Machine → Pellet Mill → Cooling Machine → Packing Machine',
+        technique: 'Wood Chipping → Crushing → Drying → Pelletizing → Cooling → Packing',
+        image: 'Biomass Pellet Line',
+        href: '/solution/biomass-pellet-line/'
+      },
+      {
+        title: 'Wood Pellet Mill Production Line',
+        description: 'Complete wood pellet production line for processing wood chips and sawdust into premium wood pellets for heating and industrial use.',
+        machines: 'Wood Chipper → Hammer Mill → Dryer → Pellet Mill → Cooler → Packing',
+        technique: 'Raw Material Preparation → Crushing → Drying → Pelletizing → Cooling → Packing',
+        image: 'Wood Pellet Mill Production Line',
+        href: '/solution/wood-pellet-mill-production-line/'
+      },
+      {
+        title: 'Straw Pelletizing Production Line',
+        description: 'Turn agricultural straw waste into valuable biomass fuel pellets. Perfect for farms and renewable energy projects.',
+        machines: 'Straw Crusher → Hammer Mill → Rotary Dryer → Pellet Mill → Cooler → Packing Machine',
+        technique: 'Straw Cutting → Crushing → Drying → Pelletizing → Cooling → Packing',
+        image: 'Straw Pelletizing Production Line',
+        href: '/solution/straw-pelletizing-production-line/'
+      },
+      {
+        title: 'Biomass Fuel Pellet Production with Rice Husk',
+        description: 'Specialized rice husk pellet production line converting agricultural byproducts into efficient bio-fuel pellets.',
+        machines: 'Rice Husk Hammer Mill → Rotary Dryer → Pellet Mill → Cooler → Packing',
+        technique: 'Raw Material Processing → Drying → Pelletizing → Cooling → Packing',
+        image: 'Rice Husk Pellet Production',
+        href: '/solution/biomass-fuel-pellet-production-with-rice-husk/'
+      },
+      {
         title: 'Fresh Wood Logs Pretreatment',
         machines: 'Drum Wood Chipper → High Efficiency Hammer Mill → Triple Pass Dryer → Pellet Machine → Cooling Machine',
         technique: 'Crushing section → Pulverizing section → Drying section → Pelletizing section',
@@ -131,7 +163,7 @@ export const siteContent = {
     items: [
       { name: 'Biomass Pellet Machine LD700C', spec: 'LD700C 110-132kw 1.5-2T/H', href: '/product/biomass-pellet-machine/', image: 'pellet-machine-LD700C' },
       { name: 'Hydraulic Crusher LDZPH1300-600', spec: 'LDZPH 7.5KW 10-15T/H', href: '/product/hydraulic-crusher-ldzph1300-600/', image: 'Hydraulic-Crusher-LDZPH1300-600' },
-      { name: 'Drum Wood Chipper', spec: 'LDBX 55-710KW 6-60T/H', href: '/product/biomass-pellet-machine/', image: '1-1-Drum-Wood-Chipper' },
+      { name: 'Drum Wood Chipper', spec: 'LDBX 55-710KW 6-60T/H', href: '/product/drum-wood-chipper/', image: '1-1-Drum-Wood-Chipper' },
       { name: 'High Efficiency Hammer Mill', spec: 'GXP 55-250KW 1-60T/H', href: '/product/hammer-mill/', image: '2-3High-Efficiency-Hammer-Mill' },
       { name: 'Biomass Pellet Machine', spec: 'RH&RV 11-110KW 0.15-1.2T/H', href: '/product/pellet-mill-rh-and-rv-series/', image: 'biomass-pellet-maker-1' },
       { name: 'Cooler Machine', spec: 'LQC 7.5-30KW 1.5-12T/H', href: '/product/cooler-machine/', image: '2-1Cooler-Machine-' },

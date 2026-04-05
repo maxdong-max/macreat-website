@@ -6,7 +6,7 @@ import { translations } from '../../lib/content';
 
 export default function BecomeDealer() {
   const t = translations.en;
-  const { contact } = t;
+  const { about, contact } = t;
 
   return (
     <>
@@ -43,7 +43,15 @@ export default function BecomeDealer() {
                 </Link>
               </div>
               <div className="about-video">
-                <div className="play-btn">▶</div>
+                <iframe 
+                  width="100%" 
+                  height="100%" 
+                  src={about.videoUrl || "https://www.youtube.com/embed/UtQPMJT_1lQ"}
+                  title="Factory Video"
+                  frameBorder="0" 
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                  allowFullScreen>
+                </iframe>
               </div>
             </div>
           </div>

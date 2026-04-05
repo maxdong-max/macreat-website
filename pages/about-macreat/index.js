@@ -35,7 +35,15 @@ export default function About() {
                 </Link>
               </div>
               <div className="about-video">
-                <button className="play-btn">{about.videoAlt}</button>
+                <iframe 
+                  width="100%" 
+                  height="100%" 
+                  src={about.videoUrl || "https://www.youtube.com/embed/UtQPMJT_1lQ"}
+                  title="Factory Video"
+                  frameBorder="0" 
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                  allowFullScreen>
+                </iframe>
               </div>
             </div>
           </div>

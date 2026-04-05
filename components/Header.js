@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Menu, X, Globe, Search, MessageCircle, Mail, Video, ExternalLink } from 'lucide-react';
+import { Menu, X, MessageCircle, Mail, Video, ExternalLink } from 'lucide-react';
 import { translations } from '../lib/content';
 
 // Map social icons - use alternatives for missing icons
@@ -16,10 +16,8 @@ const socialIconMap = {
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [langMenuOpen, setLangMenuOpen] = useState(false);
   const router = useRouter();
-  const locale = router.locale || 'en';
-  const t = translations[locale]?.nav || translations.en.nav;
+  const t = translations.en.nav;
 
   return (
     <header className="header">
@@ -48,24 +46,6 @@ export default function Header() {
                   </a>
                 );
               })}
-            </div>
-            <div className="header-actions">
-              <button className="search-btn" title="Search">
-                <Search size={18} />
-              </button>
-              <div className="lang-dropdown">
-                <button onClick={() => setLangMenuOpen(!langMenuOpen)} className="lang-btn">
-                  <Globe size={18} />
-                  <span>{locale.toUpperCase()} ▼</span>
-                </button>
-                {langMenuOpen && (
-                  <div className="dropdown-menu">
-                    <Link href="/" locale="en">English</Link>
-                    <Link href="/" locale="zh">中文</Link>
-                    <Link href="/" locale="id">Indonesia</Link>
-                  </div>
-                )}
-              </div>
             </div>
           </div>
         </div>

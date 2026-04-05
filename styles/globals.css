@@ -556,29 +556,72 @@ section h2 {
   padding: 80px 0;
 }
 
-.lead-magnet-content {
+.lead-magnet-wrapper {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: 48px;
   flex-wrap: wrap;
-  gap: 32px;
 }
 
-.lead-magnet-text h3 {
-  font-size: 2rem;
+.lead-magnet-image {
+  flex-shrink: 0;
+  width: 280px;
+  height: 200px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+
+.lead-magnet-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.lead-magnet-content {
+  flex: 1;
+  min-width: 280px;
+}
+
+.lead-magnet-content h2 {
+  font-size: 2.2rem;
   font-weight: 800;
   margin-bottom: 12px;
 }
 
-.lead-magnet-text p {
+.lead-magnet-content p {
   font-size: 1.1rem;
-  opacity: 0.8;
+  opacity: 0.9;
+  margin-bottom: 20px;
 }
 
 .sale-coupon {
   display: flex;
-  align-items: center;
-  gap: 16px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 24px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 12px;
+}
+
+.sale-coupon p {
+  font-size: 1rem;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .lead-magnet-wrapper {
+    flex-direction: column;
+    text-align: center;
+  }
+  .lead-magnet-image {
+    width: 100%;
+    max-width: 300px;
+  }
+  .sale-coupon {
+    align-items: center;
+  }
 }
 
 /* About Section */
@@ -1226,5 +1269,104 @@ section h2 {
   .btn-secondary {
     width: 100%;
     justify-content: center;
+  }
+}
+
+/* Main content padding to avoid header overlap */
+main {
+  padding-top: 80px;
+}
+
+
+/* Solution Detail Page Styles */
+.page-hero-subtitle {
+  font-size: 1.2rem;
+  color: rgba(255,255,255,0.8);
+  margin-top: 10px;
+}
+
+.solution-description {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.solution-features {
+  list-style: none;
+  padding: 0;
+  margin: 15px 0;
+}
+
+.solution-features li {
+  padding: 8px 0;
+  padding-left: 25px;
+  position: relative;
+  color: #555;
+}
+
+.solution-features li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #28a745;
+  font-weight: bold;
+}
+
+.solution-flow {
+  background: #f8f9fa;
+  padding: 15px 20px;
+  border-radius: 8px;
+  font-family: monospace;
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.6;
+}
+
+.solution-materials {
+  background: #e9f7ef;
+  padding: 15px 20px;
+  border-radius: 8px;
+  color: #155724;
+  font-size: 0.95rem;
+}
+
+.solution-technique {
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.solution-machines {
+  background: #f0f7ff;
+  padding: 15px 20px;
+  border-radius: 8px;
+  color: #004085;
+  font-weight: 500;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.cta-buttons {
+  display: flex;
+  gap: 15px;
+  margin-top: 25px;
+  flex-wrap: wrap;
+}
+
+.cta-buttons .btn {
+  flex: 1;
+  min-width: 150px;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .cta-buttons {
+    flex-direction: column;
+  }
+  
+  .cta-buttons .btn {
+    width: 100%;
   }
 }

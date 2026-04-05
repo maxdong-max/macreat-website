@@ -4,7 +4,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { translations } from '../lib/content';
 import { seoConfig } from '../lib/seo';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function Home() {
   const [activeFaq, setActiveFaq] = useState(null);
@@ -21,6 +21,15 @@ export default function Home() {
   const faq = t.faq;
   const contact = t.contact;
   const form = t.contactForm;
+
+  const [exhibition, setExhibition] = useState(null);
+
+  useEffect(() => {
+    fetch('/api/public/exhibition')
+      .then(res => res.json())
+      .then(data => setExhibition(data))
+      .catch(err => console.error(err));
+  }, []);
 
   return (
     <>
@@ -72,6 +81,28 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Exhibition Banner Section */}
+        {exhibition && exhibition.enabled && (
+        <section className="exhibition-banner"
+          style={{
+            backgroundImage: exhibition.image ? `url(${exhibition.image})` : undefined,
+            backgroundSize: 'contain',
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'center top',
+            height: '0',
+            paddingBottom: '56.25%', // 16:9 aspect ratio
+            marginBottom: '40px'
+          }}
+       >
+          <div className="container">
+            <a 
+              href="/news" 
+              style={{ display: 'block', width: '100%', height: '100%' }}
+            ></a>
+          </div>
+        </section>
+        )}
+
         {/* Materials Section */}
         <section className="materials-section">
           <div className="container">
@@ -83,13 +114,13 @@ export default function Home() {
                   <div 
                     className="material-image" 
                     style={{
-                      backgroundImage: item.image && item.image.startsWith('http') ? `url(${item.image})` : undefined,
-                      background: !item.image || !item.image.startsWith('http') ? `linear-gradient(135deg, #667eea 0%, #764ba2 100%)` : undefined,
+                      backgroundImage: item.image && (item.image.startsWith('http') || item.image.startsWith('/images')) ? `url(${item.image})` : undefined,
+                      background: !item.image || (!item.image.startsWith('http') && !item.image.startsWith('/images')) ? `linear-gradient(135deg, #667eea 0%, #764ba2 100%)` : undefined,
                       backgroundSize: 'cover',
                       backgroundPosition: 'center'
                     }}
                   >
-                    {!item.image || !item.image.startsWith('http') ? (
+                    {!item.image || (!item.image.startsWith('http') && !item.image.startsWith('/images')) ? (
                       <span style={{ color: 'white', fontSize: '3rem', opacity: 0.8 }}>⚙️</span>
                     ) : null}
                   </div>
@@ -111,13 +142,13 @@ export default function Home() {
                   <div 
                     className="solution-image"
                     style={{
-                      backgroundImage: item.image && item.image.startsWith('http') ? `url(${item.image})` : undefined,
-                      background: !item.image || !item.image.startsWith('http') ? `linear-gradient(135deg, #667eea 0%, #764ba2 100%)` : undefined,
+                      backgroundImage: item.image && (item.image.startsWith('http') || item.image.startsWith('/images')) ? `url(${item.image})` : undefined,
+                      background: !item.image || (!item.image.startsWith('http') && !item.image.startsWith('/images')) ? `linear-gradient(135deg, #667eea 0%, #764ba2 100%)` : undefined,
                       backgroundSize: 'cover',
                       backgroundPosition: 'center'
                     }}
                   >
-                    {!item.image || !item.image.startsWith('http') ? (
+                    {!item.image || (!item.image.startsWith('http') && !item.image.startsWith('/images')) ? (
                       <span style={{ color: 'white', fontSize: '3rem', opacity: 0.8 }}>⚙️</span>
                     ) : null}
                   </div>
@@ -155,14 +186,19 @@ export default function Home() {
         {/* Lead Magnet Section */}
         <section className="lead-magnet-section">
           <div className="container">
-            <div className="lead-magnet-content">
-              <h2>{lead.title}</h2>
-              <p>{lead.description}</p>
-              <Link href={lead.ctaLink} className="btn btn-primary">{lead.cta}</Link>
-            </div>
-            <div className="sale-coupon">
-              <p><strong>{lead.saleText}</strong></p>
-              <Link href={lead.saleLink} className="btn btn-secondary">{lead.saleCta}</Link>
+            <div className="lead-magnet-wrapper">
+              <div className="lead-magnet-image">
+                {lead.image && <img src={lead.image} alt="E-book" />}
+              </div>
+              <div className="lead-magnet-content">
+                <h2>{lead.title}</h2>
+                <p>{lead.description}</p>
+                <Link href={lead.ctaLink} className="btn btn-primary">{lead.cta}</Link>
+              </div>
+              <div className="sale-coupon">
+                <p><strong>{lead.saleText}</strong></p>
+                <Link href={lead.saleLink} className="btn btn-secondary">{lead.saleCta}</Link>
+              </div>
             </div>
           </div>
         </section>
@@ -202,8 +238,8 @@ export default function Home() {
                   <div 
                     className="product-image"
                     style={{
-                      backgroundImage: item.image && item.image.startsWith('http') ? `url(${item.image})` : undefined,
-                      background: !item.image || !item.image.startsWith('http') ? `linear-gradient(135deg, #667eea 0%, #764ba2 100%)` : undefined,
+                      backgroundImage: item.image && (item.image.startsWith('http') || item.image.startsWith('/images')) ? `url(${item.image})` : undefined,
+                      background: !item.image || (!item.image.startsWith('http') && !item.image.startsWith('/images')) ? `linear-gradient(135deg, #667eea 0%, #764ba2 100%)` : undefined,
                       backgroundSize: 'cover',
                       backgroundPosition: 'center',
                       display: 'flex',
@@ -211,7 +247,7 @@ export default function Home() {
                       justifyContent: 'center'
                     }}
                   >
-                    {!item.image || !item.image.startsWith('http') ? (
+                    {!item.image || (!item.image.startsWith('http') && !item.image.startsWith('/images')) ? (
                       <span style={{ color: 'white', fontSize: '3rem', opacity: 0.8 }}>⚙️</span>
                     ) : null}
                   </div>
@@ -234,8 +270,8 @@ export default function Home() {
                   <div 
                     className="case-image"
                     style={{
-                      backgroundImage: item.image && item.image.startsWith('http') ? `url(${item.image})` : undefined,
-                      background: !item.image || !item.image.startsWith('http') ? `linear-gradient(135deg, #667eea 0%, #764ba2 100%)` : undefined,
+                      backgroundImage: item.image && (item.image.startsWith('http') || item.image.startsWith('/images')) ? `url(${item.image})` : undefined,
+                      background: !item.image || (!item.image.startsWith('http') && !item.image.startsWith('/images')) ? `linear-gradient(135deg, #667eea 0%, #764ba2 100%)` : undefined,
                       backgroundSize: 'cover',
                       backgroundPosition: 'center',
                       display: 'flex',
@@ -243,7 +279,7 @@ export default function Home() {
                       justifyContent: 'center'
                     }}
                   >
-                    {!item.image || !item.image.startsWith('http') ? (
+                    {!item.image || (!item.image.startsWith('http') && !item.image.startsWith('/images')) ? (
                       <span style={{ color: 'white', fontSize: '3rem', opacity: 0.8 }}>🏭</span>
                     ) : null}
                   </div>
@@ -265,8 +301,8 @@ export default function Home() {
                   <div 
                     className="news-image"
                     style={{
-                      backgroundImage: item.image && item.image.startsWith('http') ? `url(${item.image})` : undefined,
-                      background: !item.image || !item.image.startsWith('http') ? `linear-gradient(135deg, #667eea 0%, #764ba2 100%)` : undefined,
+                      backgroundImage: item.image && (item.image.startsWith('http') || item.image.startsWith('/images')) ? `url(${item.image})` : undefined,
+                      background: !item.image || (!item.image.startsWith('http') && !item.image.startsWith('/images')) ? `linear-gradient(135deg, #667eea 0%, #764ba2 100%)` : undefined,
                       backgroundSize: 'cover',
                       backgroundPosition: 'center'
                     }}

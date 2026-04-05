@@ -27,24 +27,24 @@ export default function Contact() {
           <div className="container">
             <div className="contact-grid">
               <div className="contact-item">
-                <div className="contact-icon">📱</div>
+                <a href={contact.whatsappLink} className="contact-icon">📱</a>
                 <h4>WhatsApp</h4>
                 <a href={contact.whatsappLink}>{contact.whatsapp}</a>
               </div>
               <div className="contact-item">
-                <div className="contact-icon">✉️</div>
+                <a href={contact.emailLink} className="contact-icon">✉️</a>
                 <h4>Email</h4>
                 <a href={contact.emailLink}>{contact.email}</a>
               </div>
               <div className="contact-item">
-                <div className="contact-icon">📞</div>
+                <a href={contact.phoneLink} className="contact-icon">📞</a>
                 <h4>Phone</h4>
                 <a href={contact.phoneLink}>{contact.phone}</a>
               </div>
               <div className="contact-item">
-                <div className="contact-icon">🌐</div>
+                <a href="https://macreat.com" className="contact-icon">🌐</a>
                 <h4>Website</h4>
-                <a href="https://macreat.com">macreat.com</a>
+                <a href="/">macreat.com</a>
               </div>
             </div>
           </div>

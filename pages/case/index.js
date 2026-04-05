@@ -38,8 +38,8 @@ export default function Case() {
                   <div 
                     className="case-image"
                     style={{
-                      backgroundImage: item.image && item.image.startsWith('http') ? `url(${item.image})` : undefined,
-                      background: !item.image || !item.image.startsWith('http') ? `linear-gradient(135deg, #667eea 0%, #764ba2 100%)` : undefined,
+                      backgroundImage: item.image && (item.image.startsWith('http') || item.image.startsWith('/images')) ? `url(${item.image})` : undefined,
+                      background: !item.image || (!item.image.startsWith('http') && !item.image.startsWith('/images')) ? `linear-gradient(135deg, #667eea 0%, #764ba2 100%)` : undefined,
                       backgroundSize: 'cover',
                       backgroundPosition: 'center',
                       display: 'flex',
@@ -47,7 +47,7 @@ export default function Case() {
                       justifyContent: 'center'
                     }}
                   >
-                    {!item.image || !item.image.startsWith('http') ? (
+                    {!item.image || (!item.image.startsWith('http') && !item.image.startsWith('/images')) ? (
                       <span style={{ color: 'white', fontSize: '4rem', opacity: 0.8 }}>🏭</span>
                     ) : null}
                   </div>
