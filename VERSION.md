@@ -16,13 +16,6 @@
 | Sitemap | https://workspace-shrimp-publish.vercel.app/sitemap.xml |
 | Robots | https://workspace-shrimp-publish.vercel.app/robots.txt |
 
-### 修改内容
-
-- 修复 Product 页面图片 URL（使用线上图片）
-- 添加 FAQ 区块到产品页面
-- 添加导航栏 NEWS 下拉菜单
-- 添加下拉菜单样式
-
 ---
 
 ## 回退方法
