@@ -47,12 +47,48 @@ export const siteContent = {
     title: 'Our pellet machine work for a wide variety of materials',
     subtitle: 'Please provide raw materials and output requirements, and we will provide a biomass pellet production solution',
     items: [
-      { name: 'Wood Waste', href: '/solution/biomass-pellet-line/', image: 'wood-waste' },
-      { name: 'Wood Chips/Sawdust', href: '/solution/wood-pellet-mill-production-line/', image: 'wood-chips' },
-      { name: 'Straw Waste', href: '/solution/straw-pelletizing-production-line/', image: 'straw-waste' },
-      { name: 'Rice Husk', href: '/solution/biomass-fuel-pellet-production-with-rice-husk/', image: 'rice-husk' },
-      { name: 'Animal Feed', href: '/product/fully-automatic-feed-pellet-production-line/', image: 'animal-feed' },
-      { name: 'Palm Shell', href: '/solution/palm-efb-pellet-production-line/', image: 'palm-shell' }
+      { 
+        name: 'Wood Waste', 
+        href: '/materials/wood-waste/', 
+        image: 'wood-waste',
+        description: 'This production line can process and granulate high-moisture biological raw materials. The overall production line consists of crushing section, grinding section, drying section, granulation section, cooling section, and packaging section.',
+        process: 'Raw Material → Crushing machine → Drying machine → Grinding machine → Pelleting machine → Cooling machine → Packing machine → Pellets'
+      },
+      { 
+        name: 'Wood Chips/Sawdust', 
+        href: '/materials/wood-chips-sawdust/', 
+        image: 'wood-chips',
+        description: 'Wood pellet machine, also known as sawdust pellet machine, pellet mill, Granulator. It is a machine that presses crushed trees, planks, bark, shavings, scraps of furniture factories and other raw materials into rod-shaped particles.',
+        process: 'Crushing Section / Hammer Section / Drying Section / Pelletizing Section / Cooling Section / Packing Section'
+      },
+      { 
+        name: 'Straw Waste', 
+        href: '/materials/straw-waste/', 
+        image: 'straw-waste',
+        description: 'A lot of waste materials are generated during the production of furniture, and they are good raw materials for the production of fuel pellets. So as to realize the reuse of waste materials, and at the same time obtain more benefits.',
+        process: 'Crushing Section / Hammer Section / Drying Section / Pelletizing Section / Cooling Section / Packing Section'
+      },
+      { 
+        name: 'Rice Husk', 
+        href: '/materials/rice-husk/', 
+        image: 'rice-husk',
+        description: 'Rice husk is a good raw material for the production of biomass fuel in agricultural waste. As long as the moisture meets the requirements, the rice husk can be pressed into cylindrical pellets directly with a pellet making machine.',
+        process: 'Drying → Pelleting → Cooling → Packaging'
+      },
+      { 
+        name: 'Animal Feed', 
+        href: '/materials/animal-feed/', 
+        image: 'animal-feed',
+        description: 'Automatic dosing feed pellet line can be used for processing livestock and poultry feed pellets. It has good versatility of raw materials and is suitable for pelletizing corn, wheat, beans, oilseed meal, etc.',
+        process: 'Crushing Section → Mixing Section → Pelletizing Section → Cooling Section → Classifying Screen → Packing Section'
+      },
+      { 
+        name: 'Palm Shell', 
+        href: '/materials/palm-shell/', 
+        image: 'palm-shell',
+        description: 'The empty fruit bunches from the residues and waste produced in the palm oil extraction process can be used as a good raw material for solid biomass fuel.',
+        process: 'Crushing Section → Pulverizing Section → Pelleting Section → Cooling Section → Packing Section'
+      }
     ]
   },
 
