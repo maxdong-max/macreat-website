@@ -1284,10 +1284,6 @@ section h2 {
     flex-direction: column;
     text-align: center;
   }
-  
-  .nav-links {
-    display: none;
-  }
 }
 
 @media (max-width: 480px) {
