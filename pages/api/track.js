@@ -15,7 +15,7 @@ const ANALYTICS_KEY = 'analytics:sessions';
 async function getAnalytics() {
   try {
     const data = await redis.get(ANALYTICS_KEY);
-    return data ? JSON.parse(data) : [];
+    return data || [];
   } catch (e) {
     console.error('Get analytics error:', e);
     return [];
@@ -24,6 +24,7 @@ async function getAnalytics() {
 
 async function saveAnalytics(data) {
   try {
+    // redis.set expects a JSON string
     await redis.set(ANALYTICS_KEY, JSON.stringify(data));
   } catch (e) {
     console.error('Save analytics error:', e);
