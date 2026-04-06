@@ -44,7 +44,7 @@ export default function Contact() {
               <div className="contact-item">
                 <a href="/" className="contact-icon">🌐</a>
                 <h4>Website</h4>
-                <a href="/">macreat.com</a>
+                <a href="/">workspace-shrimp-publish.vercel.app</a>
               </div>
             </div>
           </div>
