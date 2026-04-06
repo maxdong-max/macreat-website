@@ -1,17 +1,95 @@
 'use client';
 
 import { useEffect, useRef, useCallback } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 
 export default function AnalyticsTracker() {
   const pathname = usePathname();
-  const router = useRouter();
+  const searchParams = useSearchParams();
   const startTime = useRef(Date.now());
-  const currentPath = useRef(pathname);
+  const currentPath = useRef(pathname + (searchParams?.toString() ? '?' + searchParams.toString() : ''));
+
+  // 解析 User-Agent
+  const parseUserAgent = (ua) => {
+    const browser = /Chrome\/(\d+)/.test(ua) ? 'Chrome' :
+                   /Safari\/(\d+)/.test(ua) && !/Chrome/.test(ua) ? 'Safari' :
+                   /Firefox\/(\d+)/.test(ua) ? 'Firefox' :
+                   /Edge\/(\d+)/.test(ua) ? 'Edge' : 'Other';
+    
+    const os = /Windows/.test(ua) ? 'Windows' :
+               /Mac/i.test(ua) ? 'macOS' :
+               /Linux/.test(ua) ? 'Linux' :
+               /Android/.test(ua) ? 'Android' :
+               /iPhone|iPad|iPod/.test(ua) ? 'iOS' : 'Other';
+    
+    const device = /Mobile|Android|iPhone/.test(ua) ? 'mobile' : 'desktop';
+    
+    return { browser, os, device };
+  };
+
+  // 解析搜索引擎来源
+  const parseReferrer = (referrer, searchParams) => {
+    if (!referrer) return { source: 'direct', medium: 'none', searchEngine: null };
+    
+    // 检查 UTM 参数
+    const utmSource = searchParams?.get('utm_source');
+    const utmMedium = searchParams?.get('utm_medium');
+    const utmCampaign = searchParams?.get('utm_campaign');
+    
+    if (utmSource) {
+      return { 
+        source: utmSource, 
+        medium: utmMedium || 'unknown', 
+        campaign: utmCampaign,
+        searchEngine: null 
+      };
+    }
+    
+    // 解析搜索引擎
+    const searchEngines = [
+      { name: 'Google', pattern: /google\./ },
+      { name: 'Bing', pattern: /bing\./ },
+      { name: 'Yahoo', pattern: /yahoo\./ },
+      { name: 'Baidu', pattern: /baidu\./ },
+      { name: 'Yandex', pattern: /yandex\./ },
+      { name: 'DuckDuckGo', pattern: /duckduckgo\./ },
+    ];
+    
+    for (const se of searchEngines) {
+      if (se.pattern.test(referrer)) {
+        return { source: se.name, medium: 'organic', searchEngine: se.name };
+      }
+    }
+    
+    // 社交媒体来源
+    const socialMedia = [
+      { name: 'Facebook', pattern: /facebook\./ },
+      { name: 'Twitter', pattern: /twitter\.|x\.com/ },
+      { name: 'LinkedIn', pattern: /linkedin\./ },
+      { name: 'Instagram', pattern: /instagram\./ },
+      { name: 'YouTube', pattern: /youtube\./ },
+    ];
+    
+    for (const sm of socialMedia) {
+      if (sm.pattern.test(referrer)) {
+        return { source: sm.name, medium: 'social', searchEngine: null };
+      }
+    }
+    
+    // 其他引荐来源
+    return { source: 'referral', medium: 'referral', searchEngine: null };
+  };
 
   // 发送追踪数据
   const track = useCallback(async (type, data = {}) => {
     try {
+      const ua = navigator.userAgent;
+      const parsedUA = parseUserAgent(ua);
+      
+      // 获取语言和时区
+      const language = navigator.language || navigator.userLanguage;
+      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      
       await fetch('/api/track', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -19,29 +97,43 @@ export default function AnalyticsTracker() {
           type,
           path: currentPath.current,
           timestamp: Date.now(),
+          userAgent: ua,
+          browser: parsedUA.browser,
+          os: parsedUA.os,
+          device: parsedUA.device,
+          language,
+          timezone,
           ...data
         })
       });
     } catch (e) {
-      // 静默失败，不影响用户体验
+      // 静默失败
     }
   }, []);
 
   // 追踪页面访问
   useEffect(() => {
-    if (pathname !== currentPath.current) {
+    const fullPath = pathname + (searchParams?.toString() ? '?' + searchParams.toString() : '');
+    
+    if (fullPath !== currentPath.current) {
       // 记录上一页停留时间
       const stayDuration = Math.round((Date.now() - startTime.current) / 1000);
       if (stayDuration > 0) {
         track('stay', { stayDuration });
       }
       
+      // 解析 UTM 和来源
+      const referrerData = parseReferrer(document.referrer, searchParams);
+      
       // 新页面访问
-      currentPath.current = pathname;
+      currentPath.current = fullPath;
       startTime.current = Date.now();
-      track('pageview', { referrer: document.referrer });
+      track('pageview', { 
+        referrer: document.referrer,
+        ...referrerData
+      });
     }
-  }, [pathname, track]);
+  }, [pathname, searchParams, track]);
 
   // 追踪社交媒体点击
   useEffect(() => {

@@ -1,5 +1,5 @@
 /**
- * 访问追踪 API (Upstash Redis 持久化 - Direct HTTP)
+ * 访问追踪 API (Upstash Redis 持久化 - SEO/GEO 增强版)
  */
 import { redis } from '../../lib/redis';
 
@@ -24,7 +24,6 @@ async function getAnalytics() {
 
 async function saveAnalytics(data) {
   try {
-    // redis.set expects a JSON string
     await redis.set(ANALYTICS_KEY, JSON.stringify(data));
   } catch (e) {
     console.error('Save analytics error:', e);
@@ -44,11 +43,22 @@ export default async function handler(req, res) {
       stayDuration,
       clickType,
       formData,
-      timestamp = Date.now()
+      timestamp = Date.now(),
+      // 新增 SEO/GEO 字段
+      browser,
+      os,
+      device,
+      language,
+      timezone,
+      source,
+      medium,
+      campaign,
+      searchEngine
     } = req.body;
 
     const analytics = await getAnalytics();
     
+    // 查找或创建会话 (30分钟超时)
     let session = analytics.find(a => 
       a.ip === ip && 
       a.status === 'active' &&
@@ -61,7 +71,16 @@ export default async function handler(req, res) {
           id: Date.now().toString(36) + Math.random().toString(36).substr(2, 5),
           ip,
           userAgent,
+          browser,
+          os,
+          device,
+          language,
+          timezone,
           referrer,
+          source,
+          medium,
+          campaign,
+          searchEngine,
           firstVisit: timestamp,
           lastActive: timestamp,
           status: 'active',
@@ -94,7 +113,16 @@ export default async function handler(req, res) {
           id: Date.now().toString(36) + Math.random().toString(36).substr(2, 5),
           ip,
           userAgent,
+          browser,
+          os,
+          device,
+          language,
+          timezone,
           referrer,
+          source,
+          medium,
+          campaign,
+          searchEngine,
           firstVisit: timestamp,
           lastActive: timestamp,
           status: 'active',
@@ -123,6 +151,7 @@ export default async function handler(req, res) {
       session.lastActive = timestamp;
     }
     
+    // 标记不活跃的会话
     analytics.forEach(a => {
       if (a.status === 'active' && (Date.now() - a.lastActive) > 30 * 60 * 1000) {
         a.status = 'inactive';
@@ -147,6 +176,7 @@ export default async function handler(req, res) {
     const totalPageViews = analytics.reduce((sum, a) => sum + (a.pages?.length || 0), 0);
     const uniqueIps = [...new Set(analytics.map(a => a.ip))].length;
     
+    // 点击统计
     const clickStats = {
       whatsapp: analytics.reduce((sum, a) => sum + (a.clicks?.filter(c => c.clickType === 'whatsapp').length || 0), 0),
       email: analytics.reduce((sum, a) => sum + (a.clicks?.filter(c => c.clickType === 'email').length || 0), 0),
@@ -158,6 +188,7 @@ export default async function handler(req, res) {
     
     const formSubmits = analytics.reduce((sum, a) => sum + (a.forms?.length || 0), 0);
     
+    // 页面统计
     const pageCounts = {};
     analytics.forEach(a => {
       a.pages?.forEach(p => {
@@ -169,6 +200,25 @@ export default async function handler(req, res) {
       .slice(0, 10)
       .map(([path, count]) => ({ path, count }));
     
+    // SEO 统计
+    const seoStats = {
+      sources: {},
+      mediums: {},
+      searchEngines: {},
+      browsers: {},
+      os: {},
+      devices: {}
+    };
+    
+    analytics.forEach(a => {
+      if (a.source) seoStats.sources[a.source] = (seoStats.sources[a.source] || 0) + 1;
+      if (a.medium) seoStats.mediums[a.medium] = (seoStats.mediums[a.medium] || 0) + 1;
+      if (a.searchEngine) seoStats.searchEngines[a.searchEngine] = (seoStats.searchEngines[a.searchEngine] || 0) + 1;
+      if (a.browser) seoStats.browsers[a.browser] = (seoStats.browsers[a.browser] || 0) + 1;
+      if (a.os) seoStats.os[a.os] = (seoStats.os[a.os] || 0) + 1;
+      if (a.device) seoStats.devices[a.device] = (seoStats.devices[a.device] || 0) + 1;
+    });
+    
     return res.status(200).json({
       summary: {
         todayViews,
@@ -177,7 +227,8 @@ export default async function handler(req, res) {
         uniqueIps,
         clickStats,
         formSubmits,
-        topPages
+        topPages,
+        seoStats
       }
     });
   }
