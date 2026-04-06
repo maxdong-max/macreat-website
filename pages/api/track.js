@@ -15,9 +15,13 @@ const ANALYTICS_KEY = 'analytics:sessions';
 async function getAnalytics() {
   try {
     const client = getRedis();
-    if (!client) return [];
+    if (!client) {
+      console.log('Redis client not available');
+      return [];
+    }
     const data = await client.get(ANALYTICS_KEY);
-    return data ? JSON.parse(data) : [];
+    console.log('Redis get result:', data ? 'has data' : 'null');
+    return data || [];
   } catch (e) {
     console.error('Redis get error:', e);
     return [];
@@ -27,8 +31,12 @@ async function getAnalytics() {
 async function saveAnalytics(data) {
   try {
     const client = getRedis();
-    if (!client) return;
+    if (!client) {
+      console.log('Redis client not available for save');
+      return;
+    }
     await client.set(ANALYTICS_KEY, JSON.stringify(data));
+    console.log('Redis set success, data length:', data.length);
   } catch (e) {
     console.error('Redis set error:', e);
   }
@@ -51,6 +59,7 @@ export default async function handler(req, res) {
     } = req.body;
 
     const analytics = await getAnalytics();
+    console.log('Current analytics count:', analytics.length);
     
     let session = analytics.find(a => 
       a.ip === ip && 
