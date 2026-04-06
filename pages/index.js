@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import FaqSection from '../components/FaqSection';
+import HeroSection from '../components/HeroSection';
 import { translations } from '../lib/content';
 import { seoConfig } from '../lib/seo';
 import { useState, useEffect } from 'react';
@@ -52,35 +53,7 @@ export default function Home() {
       <Header />
 
       <main id="main">
-        {/* Hero Section */}
-        <section 
-          className="hero-section"
-          style={hero.backgroundImage ? {
-            backgroundImage: `linear-gradient(rgba(26,26,46,0.92), rgba(0,102,204,0.88)), url(${hero.backgroundImage})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center'
-          } : {}}
-        >
-          <div className="container">
-            <div className="hero-content">
-              <span className="hero-badge">🚜 Global Leading Manufacturer Since 1960</span>
-              <h1>{hero.title}</h1>
-              <p>{hero.subtitle}</p>
-              <div className="hero-stats">
-                {hero.stats.map((stat, idx) => (
-                  <div key={idx} className="stat-item">
-                    <span className="stat-number">{idx === 0 ? '62+' : idx === 1 ? '1000+' : '50+'}</span>
-                    <span className="stat-label">{stat.label}</span>
-                  </div>
-                ))}
-              </div>
-              <div className="hero-cta">
-                <a href={hero.cta[0].href} className="btn btn-primary">{hero.cta[0].text}</a>
-                <Link href={hero.cta[1].href} className="btn btn-secondary">{hero.cta[1].text}</Link>
-              </div>
-            </div>
-          </div>
-        </section>
+        <HeroSection hero={hero} />
 
         {/* Exhibition Banner Section */}
         {exhibition && exhibition.enabled && (
