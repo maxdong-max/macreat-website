@@ -1679,46 +1679,82 @@ main {
     padding: 0 16px;
   }
   
-  /* Header - keep fixed on mobile, always open menu */
+  /* Header - mobile layout: logo+social on top, nav below */
   .header {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     z-index: 1000;
-    height: auto;
-    min-height: 50px;
   }
   
+  /* Show header-top on mobile */
   .header-top {
-    display: none;
+    display: block;
+    background: var(--dark);
+    padding: 6px 0;
   }
   
-  .main-nav {
-    padding: 8px 0;
-    position: relative;
-    background: white;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    min-height: 50px;
+  .header-top .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 12px;
+  }
+  
+  .header-top-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
   }
   
   .logo-section .logo {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
   }
   
   .logo-section .logo img {
-    height: 28px;
+    height: 24px;
   }
   
   .logo-section .logo span {
-    font-size: 1rem;
+    font-size: 0.9rem;
+    color: white;
   }
   
-  /* Hide mobile menu button, always show nav */
+  .header-social {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .header-social a {
+    color: rgba(255,255,255,0.8);
+    display: flex;
+    align-items: center;
+  }
+  
+  .header-social a:hover {
+    color: white;
+  }
+  
+  /* Hide mobile menu button */
   .mobile-menu-btn {
     display: none;
+  }
+  
+  /* Main nav below header-top */
+  .main-nav {
+    padding: 8px 0;
+    background: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+  
+  .main-nav .container {
+    display: flex;
+    justify-content: center;
+    padding: 0 8px;
   }
   
   /* Mobile nav - always visible */
@@ -1729,11 +1765,10 @@ main {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 4px;
-    padding: 6px 4px;
+    gap: 2px;
+    padding: 4px;
     box-shadow: none;
-    max-height: none;
-    overflow: visible;
+    width: 100%;
   }
   
   .nav-links li {
@@ -1744,7 +1779,7 @@ main {
   }
   
   .nav-links a {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     display: block;
     white-space: nowrap;
     padding: 4px 6px;
@@ -1752,12 +1787,19 @@ main {
   
   /* Hero - add padding for fixed header */
   .hero-section {
-    padding-top: 80px;
+    padding-top: 100px;
     padding-left: 12px;
     padding-right: 12px;
     padding-bottom: 40px;
     min-height: auto;
   }
+  
+  /* Make container full width on mobile */
+  .container {
+    max-width: 100%;
+    padding: 0 12px;
+  }
+}
   
   .hero-content {
     text-align: left;
