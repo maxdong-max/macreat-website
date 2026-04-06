@@ -1,11 +1,7 @@
 /**
- * 访问追踪 API
- * 记录：IP、访问页面、停留时间、来源、点击行为等
+ * 访问追踪 API (Upstash Redis 持久化)
  */
-import fs from 'fs';
-import path from 'path';
-
-const DATA_FILE = path.join(process.cwd(), 'data', 'analytics.json');
+import { redis } from '../../lib/redis';
 
 function getClientIp(req) {
   return req.headers['x-forwarded-for']?.split(',')[0]?.trim() ||
@@ -14,22 +10,23 @@ function getClientIp(req) {
          'unknown';
 }
 
-function readAnalytics() {
+const ANALYTICS_KEY = 'analytics:sessions';
+
+async function getAnalytics() {
   try {
-    if (fs.existsSync(DATA_FILE)) {
-      return JSON.parse(fs.readFileSync(DATA_FILE, 'utf-8'));
-    }
+    const data = await redis.get(ANALYTICS_KEY);
+    return data || [];
   } catch (e) {
-    console.error('Error reading analytics:', e);
+    console.error('Redis get error:', e);
+    return [];
   }
-  return [];
 }
 
-function writeAnalytics(data) {
+async function saveAnalytics(data) {
   try {
-    fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
+    await redis.set(ANALYTICS_KEY, JSON.stringify(data));
   } catch (e) {
-    console.error('Error writing analytics:', e);
+    console.error('Redis set error:', e);
   }
 }
 
@@ -40,22 +37,21 @@ export default async function handler(req, res) {
     const ip = getClientIp(req);
     const userAgent = req.headers['user-agent'] || '';
     const {
-      type,           // 'pageview' | 'stay' | 'click' | 'form' | 'social'
+      type,
       path: pagePath,
       referrer,
-      stayDuration,   // 停留时间（秒）
-      clickType,      // 点击类型：'contact' | 'whatsapp' | 'email' | 'facebook' | 'youtube' | 'instagram' | 'twitter'
-      formData,       // 表单数据（不含敏感信息）
+      stayDuration,
+      clickType,
+      formData,
       timestamp = Date.now()
     } = req.body;
 
-    const analytics = readAnalytics();
+    const analytics = await getAnalytics();
     
-    // 查找同一IP的最近会话
     let session = analytics.find(a => 
       a.ip === ip && 
       a.status === 'active' &&
-      (Date.now() - a.lastActive) < 30 * 60 * 1000 // 30分钟内为同一会话
+      (Date.now() - a.lastActive) < 30 * 60 * 1000
     );
 
     if (type === 'pageview') {
@@ -126,7 +122,7 @@ export default async function handler(req, res) {
       session.lastActive = timestamp;
     }
     
-    // 标记不活跃的会话（超过30分钟）
+    // 标记不活跃的会话
     analytics.forEach(a => {
       if (a.status === 'active' && (Date.now() - a.lastActive) > 30 * 60 * 1000) {
         a.status = 'inactive';
@@ -134,28 +130,23 @@ export default async function handler(req, res) {
       }
     });
 
-    writeAnalytics(analytics);
+    await saveAnalytics(analytics);
     
     return res.status(200).json({ success: true });
   }
 
-  // GET 只返回统计数据，不返回原始明细
   if (method === 'GET') {
-    const analytics = readAnalytics();
-    const now = Date.now();
+    const analytics = await getAnalytics();
     
-    // 今日数据
     const todayStart = new Date().setHours(0, 0, 0, 0);
     const todayViews = analytics.filter(a => 
       a.pages?.some(p => p.timestamp >= todayStart)
     ).length;
     
-    // 总数据
     const totalVisits = analytics.length;
     const totalPageViews = analytics.reduce((sum, a) => sum + (a.pages?.length || 0), 0);
     const uniqueIps = [...new Set(analytics.map(a => a.ip))].length;
     
-    // 点击统计
     const clickStats = {
       whatsapp: analytics.reduce((sum, a) => sum + (a.clicks?.filter(c => c.clickType === 'whatsapp').length || 0), 0),
       email: analytics.reduce((sum, a) => sum + (a.clicks?.filter(c => c.clickType === 'email').length || 0), 0),
@@ -165,10 +156,8 @@ export default async function handler(req, res) {
       twitter: analytics.reduce((sum, a) => sum + (a.clicks?.filter(c => c.clickType === 'twitter').length || 0), 0),
     };
     
-    // 表单提交统计
     const formSubmits = analytics.reduce((sum, a) => sum + (a.forms?.length || 0), 0);
     
-    // 热门页面
     const pageCounts = {};
     analytics.forEach(a => {
       a.pages?.forEach(p => {
