@@ -1,7 +1,7 @@
 /**
  * 访问追踪 API (Upstash Redis 持久化)
  */
-import { redis } from '../../lib/redis';
+import { getRedis } from '../../lib/redis';
 
 function getClientIp(req) {
   return req.headers['x-forwarded-for']?.split(',')[0]?.trim() ||
@@ -14,8 +14,10 @@ const ANALYTICS_KEY = 'analytics:sessions';
 
 async function getAnalytics() {
   try {
-    const data = await redis.get(ANALYTICS_KEY);
-    return data || [];
+    const client = getRedis();
+    if (!client) return [];
+    const data = await client.get(ANALYTICS_KEY);
+    return data ? JSON.parse(data) : [];
   } catch (e) {
     console.error('Redis get error:', e);
     return [];
@@ -24,7 +26,9 @@ async function getAnalytics() {
 
 async function saveAnalytics(data) {
   try {
-    await redis.set(ANALYTICS_KEY, JSON.stringify(data));
+    const client = getRedis();
+    if (!client) return;
+    await client.set(ANALYTICS_KEY, JSON.stringify(data));
   } catch (e) {
     console.error('Redis set error:', e);
   }
