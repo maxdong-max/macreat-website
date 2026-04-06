@@ -30,7 +30,7 @@ export default function Footer() {
             </div>
             <div className="footer-social">
               {contact.social.map((item, idx) => (
-                <a key={idx} href={item.href} target="_blank" rel="noopener noreferrer">
+                <a key={idx} href={item.href} target="_blank" rel="noopener noreferrer" style={{ fontWeight: 'bold', color: 'var(--primary)', fontSize: '1.1rem' }}>
                   {item.name}
                 </a>
               ))}

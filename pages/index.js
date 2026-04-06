@@ -2,6 +2,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import FaqSection from '../components/FaqSection';
 import { translations } from '../lib/content';
 import { seoConfig } from '../lib/seo';
 import { useState, useEffect } from 'react';
@@ -316,28 +317,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* FAQ Section */}
-        <section className="faq-section">
-          <div className="container">
-            <h2>{faq.title}</h2>
-            <div className="faq-list">
-              {faq.items.map((item, idx) => (
-                <div key={idx} className={`faq-item ${activeFaq === idx ? 'active' : ''}`}>
-                  <button 
-                    className="faq-question" 
-                    onClick={() => setActiveFaq(activeFaq === idx ? null : idx)}
-                  >
-                    <span>{item.question}</span>
-                    <span className="faq-icon">{activeFaq === idx ? '−' : '+'}</span>
-                  </button>
-                  <div className="faq-answer">
-                    <p>{item.answer}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        <FaqSection faq={faq} />
 
         {/* Contact Section */}
         <section className="contact-section">

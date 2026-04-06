@@ -1582,3 +1582,62 @@ main {
 .product-image {
   margin-bottom: 30px;
 }
+
+/* News Detail Page */
+.news-detail-section {
+  padding: 40px 0 60px;
+}
+
+.news-detail-image {
+  margin-bottom: 30px;
+}
+
+.news-detail-image img {
+  width: 100%;
+  border-radius: 16px;
+}
+
+.news-detail-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.news-detail-content p {
+  margin-bottom: 20px;
+  line-height: 1.8;
+  color: var(--text);
+}
+
+.news-detail-content h2 {
+  margin: 30px 0 15px;
+  color: var(--primary);
+}
+
+.news-section {
+  margin: 20px 0;
+}
+
+.news-section h2 {
+  margin: 25px 0 10px;
+  font-size: 1.5rem;
+}
+
+.news-section p {
+  margin-bottom: 15px;
+}
+
+.news-back-link {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+.news-back-link a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.news-back-link a:hover {
+  text-decoration: underline;
+}
