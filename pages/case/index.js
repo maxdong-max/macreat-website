@@ -17,7 +17,7 @@ export default function Case() {
         <meta name="description" content="Explore our successful case studies of pellet machine installations worldwide." />
         <meta property="og:title" content="Case Studies - Macreat Biomass Pellet Machine" />
         <meta property="og:type" content="website" />
-        <link rel="canonical" href="https://macreat.com/case/" />
+        <link rel="canonical" href="/case/" />
       </Head>
 
       <Header />

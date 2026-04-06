@@ -64,7 +64,7 @@ export default function ProductDetail({ product, slug }) {
         <meta property="og:description" content={product.description} />
         <meta property="og:image" content={product.image} />
         <meta property="og:type" content="product" />
-        <link rel="canonical" href={`https://macreat.com/product/${slug}/`} />
+        <link rel="canonical" href={`/product/${slug}/`} />
       </Head>
 
       <Header />

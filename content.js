@@ -30,7 +30,7 @@ export const siteContent = {
   // Homepage Hero Section
   hero: {
     title: 'Worldwide Distributors Recruitment!',
-    subtitle: 'Founded in 1960, Macreat is a leading manufacturer and supplier of pellet machines. Manufacturer of solutions for pellet machines. As a technology-driven company, we integrate design, research and development, manufacturing, and sales to deliver innovative pellet machine solutions that meet global market demands.',
+    subtitle: 'Founded in 1960, Macreat is a leading manufacturer and supplier of pellet machines. Manufacturer of solutions for pellet machines. As a technology-driven company, we integrate design, research and development, manufacturing, and sales to deliver innovative pellet machine solutions that meet global market demands. Please provide raw materials and output requirements, and we will provide a biomass pellet production solution.',
     stats: [
       { label: 'R&D and production', icon: 'research' },
       { label: 'Factory direct sales', icon: 'factory' },
@@ -136,12 +136,12 @@ export const siteContent = {
         technique: 'Wood Chipping → Crushing → Drying → Pelletizing → Cooling → Packing',
         image: '/images/macreat/11-1.jpg',
         images: {
-          overview: 'https://macreat.com/wp-content/uploads/2024/11/05-2英文.jpg',
-          features: 'https://macreat.com/wp-content/uploads/2024/11/05-1英文.jpg',
-          process: 'https://macreat.com/wp-content/uploads/2024/12/07-Granulation-Process-1.jpg',
-          customerPlant: 'https://macreat.com/wp-content/uploads/2024/12/07-Customer-plant-1.jpg',
-          product: 'https://macreat.com/wp-content/uploads/2024/12/07-Biomass-Pellet-Line.jpg',
-          productVideo: 'https://macreat.com/wp-content/uploads/2024/11/16-Wood-Chipper-Crusher-LDBX218-working-video-in-our-customers-factory.jpg'
+          overview: '/images/macreat/05-2.jpg',
+          features: '/images/macreat/05-1.jpg',
+          process: '/images/macreat/granulation-process.jpg',
+          customerPlant: '/images/macreat/customer-plant.jpg',
+          product: '/images/macreat/biomass-pellet-line.jpg',
+          productVideo: '/images/macreat/ldbx218-working.jpg'
         },
         href: '/solution/biomass-pellet-line/'
       },
@@ -191,6 +191,49 @@ export const siteContent = {
         href: '/solution/plywood-waste-pellet-making-solution/'
       },
       {
+        title: 'Furniture Scraps Pellet Production Solution',
+        description: 'A lot of waste materials are generated during the production of furniture, and they are good raw materials for the production of fuel pellets. So as to realize the reuse of waste materials, and at the same time obtain more benefits.',
+        features: [
+          'Crushing Section: Process scraps into wood chips with drum wood chipper (30-50 mm)',
+          'Pulverizing Section: Secondary size reduction into sawdust (5-8mm)',
+          'Pelleting Section: Pure physical extrusion, no chemical additives',
+          'Cooling Section: Cool down pellets for better storage',
+          'Packing Section: Automatic weighing and bagging'
+        ],
+        flow: 'Raw Material → Crushing → Pulverizing → Pelletizing → Cooling → Packing → Pellets',
+        customerPlant: {
+          capacity: '3-4 T/H',
+          features: [
+            'Drum wood chipper BX218',
+            'Efficiency hammer mill GXP65*100',
+            'LD700 1.5-2t/h pellet mill',
+            'Cooler SKLN2.5',
+            'Small packing machine DCS-A50'
+          ],
+          materials: 'Wood scraps, Furniture waste'
+        },
+        machines: 'Drum Wood Chipper → Hammer Mill → Dryer → Pellet Mill → Cooler → Packing Machine',
+        technique: 'Crushing → Pulverizing → Drying → Pelletizing → Cooling → Packing',
+        image: '13-Furniture-Scraps-Pellet',
+        href: '/solution/furniture-scraps-pellet-production-solution/'
+      },
+      {
+        title: 'Peanut Shell Pelletizing Solution',
+        description: 'Rice husk and peanut shell pelletizing is to transport rice husk and peanut husk with moisture content of 10%-15% directly to the pellet machine, and press them into rod-shaped pellets with a diameter of 6/8/10 mm through mechanical and physical extrusion.',
+        features: [
+          'Drying Section: Ensure moisture content 10-15%',
+          'Pelletizing Section: Produce 6/8/10mm diameter pellets',
+          'Cooling Section: Cool pellets to natural temperature',
+          'Packing Section: Automatic weighing and sealing',
+          'Low moisture requirement: Less than 15%'
+        ],
+        flow: 'Raw Material (10-15% moisture) → Drying → Pelletizing → Cooling → Packing → Pellets',
+        machines: 'Dryer → Pellet Mill → Cooler → Packing Machine',
+        technique: 'Drying → Pelletizing → Cooling → Packing',
+        image: '14-Peanut-Shell-Pellet',
+        href: '/solution/peanut-shell-pelletizing-solution/'
+      },
+      {
         title: 'Fully Automatic Feed Pellet Production Line',
         description: 'Our automatic dosing feed pellet line is designed for the efficient processing of livestock and poultry feed. With excellent raw material flexibility, it is suitable for producing pellets from corn, wheat, beans, oilseed meal, and more. This advanced line can simultaneously handle both powder and granule processing, enabling the production of two types of feed products at the same time.',
         flow: 'Animal Feed Production Plant Flow Chart: 1. Crushing Section → 2. Mixing Section → 3. Pelletizing Section → 4. Cooling Section → 5. Classifying Screen → 6. Packing Section',
@@ -226,7 +269,13 @@ export const siteContent = {
   // About Section
   about: {
     title: 'ABOUT MACREAT',
-    description: 'Founded in 1960, Macreat is a leading manufacturer and supplier of pellet machines and biomass energy equipment. As a technology-driven enterprise, we integrate design, R&D, manufacturing, and sales to deliver innovative and reliable solutions for the renewable energy industry. Core Products: Pellet Mills, Hammer Mills, Auxiliary Equipment, Crushing Machine, Pellet drying Machine, Hammer Mills, Pellet-production Line, Pelletizing Machine, etc.',
+    description: 'Macreat Machinery Co., LTD - Specialized: Complete biomass pellet production line, Drum Wood Chipper, biomass pellet machine, wood chipper, hammer mill, dryer machine, cooler machine and packing machine. Founded in 1960, Macreat is a leading manufacturer and supplier of pellet machines and biomass energy equipment. As a technology-driven enterprise, we integrate design, R&D, manufacturing, and sales to deliver innovative and reliable solutions for the renewable energy industry.',
+    stats: [
+      { label: '35,000 m²', icon: 'factory' },
+      { label: '200+ Employees', icon: 'team' },
+      { label: '60 Years Experience', icon: 'experience' },
+      { label: '30+ Export Years', icon: 'global' }
+    ],
     cta: 'About Us',
     ctaLink: '/about-macreat/',
     videoAlt: 'factory'
@@ -235,7 +284,7 @@ export const siteContent = {
   // Products Section
   products: {
     title: 'Product',
-    subtitle: '62 YEARS Professional Production Experience, Professioanl Design And Technical Team Scheme For You',
+    subtitle: '62 YEARS Professional Production Experience, Professional Design And Technical Team Scheme For You',
     items: [
       { name: 'Biomass Pellet Machine LD700C', spec: 'LD700C 110-132kw 1.5-2T/H', href: '/product/biomass-pellet-machine/', image: 'pellet-machine-LD700C' },
       { name: 'Hydraulic Crusher LDZPH1300-600', spec: 'LDZPH 7.5KW 10-15T/H', href: '/product/hydraulic-crusher-ldzph1300-600/', image: 'Hydraulic-Crusher-LDZPH1300-600' },
@@ -267,7 +316,7 @@ export const siteContent = {
   // News Section
   news: {
     title: 'News',
-    subtitle: 'Professioanl Design And Technical Team Scheme For You',
+    subtitle: 'Professional Design And Technical Team Scheme For You',
     items: [
       {
         title: 'MACREAT Makes Dual-Expo Debut in Thailand & Vietnam',
@@ -343,29 +392,29 @@ export const siteContent = {
       {
         title: 'Biomass Pellet Line Solution',
         links: [
-          { text: 'Biomass Pellet Line', href: 'https://macreat.com/solution/biomass-pellet-line/' },
-          { text: 'Furniture Scraps Pellet Production Solution', href: 'https://macreat.com/solution/furniture-scraps-pellet-production-solution/' },
-          { text: 'Palm EFB Pellet production line', href: 'https://macreat.com/solution/palm-efb-pellet-production-line/' },
-          { text: 'Peanut shell pelletizing solution', href: 'https://macreat.com/solution/peanut-shell-pelletizing-solution/' },
-          { text: 'Plywood Waste Pellet Making Solution', href: 'https://macreat.com/solution/plywood-waste-pellet-making-solution/' },
-          { text: 'Biomass Fuel Pellet Production with Rice Husk', href: 'https://macreat.com/solution/biomass-fuel-pellet-production-with-rice-husk/' }
+          { text: 'Biomass Pellet Line', href: '/solution/biomass-pellet-line/' },
+          { text: 'Furniture Scraps Pellet Production Solution', href: '/solution/furniture-scraps-pellet-production-solution/' },
+          { text: 'Palm EFB Pellet production line', href: '/solution/palm-efb-pellet-production-line/' },
+          { text: 'Peanut shell pelletizing solution', href: '/solution/peanut-shell-pelletizing-solution/' },
+          { text: 'Plywood Waste Pellet Making Solution', href: '/solution/plywood-waste-pellet-making-solution/' },
+          { text: 'Biomass Fuel Pellet Production with Rice Husk', href: '/solution/biomass-fuel-pellet-production-with-rice-husk/' }
         ]
       },
       {
         title: 'Pellet Production Line',
         links: [
-          { text: '1-1.5 t/h sanding powder pellets production line in Indonesia', href: 'https://macreat.com/product/1-1-5-t-h-sanding-powder-pellets-production-line/' },
-          { text: '1-1.5T/H Pellet Production Line', href: 'https://macreat.com/product/1-1-5t-h-pellet-production-line/' },
-          { text: '2-3 t/h peanut shell wood pellet machine line in Hebei', href: 'https://macreat.com/product/2-3-t-h-peanut-shell-wood-pellet-line/' },
-          { text: '4t/h Wood Pellet Production Line Case', href: 'https://macreat.com/product/4t-h-wood-pellet-production-line-case/' },
-          { text: '5-6 t/h Wood log pellets production line in Indonesia', href: 'https://macreat.com/product/5-6-t-h-wood-log-pellets-production-line/' },
-          { text: '8-12T/H Pellet Production Line', href: 'https://macreat.com/product/8-12t-h-pellet-production-line/' }
+          { text: '1-1.5 t/h sanding powder pellets production line in Indonesia', href: '/product/1-1-5-t-h-sanding-powder-pellets-production-line/' },
+          { text: '1-1.5T/H Pellet Production Line', href: '/product/1-1-5t-h-pellet-production-line/' },
+          { text: '2-3 t/h peanut shell wood pellet machine line in Hebei', href: '/product/2-3-t-h-peanut-shell-wood-pellet-line/' },
+          { text: '4t/h Wood Pellet Production Line Case', href: '/product/4t-h-wood-pellet-production-line-case/' },
+          { text: '5-6 t/h Wood log pellets production line in Indonesia', href: '/product/5-6-t-h-wood-log-pellets-production-line/' },
+          { text: '8-12T/H Pellet Production Line', href: '/product/8-12t-h-pellet-production-line/' }
         ]
       }
     ],
     productLinks: [
-      { text: 'Biomass Pellet Machine LD700C', href: 'https://macreat.com/product/biomass-pellet-machine/' },
-      { text: 'Hydraulic Crusher / Wood Chipper LDZPH1300-600', href: 'https://macreat.com/product/hydraulic-crusher-ldzph1300-600/' }
+      { text: 'Biomass Pellet Machine LD700C', href: '/product/biomass-pellet-machine/' },
+      { text: 'Hydraulic Crusher / Wood Chipper LDZPH1300-600', href: '/product/hydraulic-crusher-ldzph1300-600/' }
     ]
   },
 

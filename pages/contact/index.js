@@ -42,7 +42,7 @@ export default function Contact() {
                 <a href={contact.phoneLink}>{contact.phone}</a>
               </div>
               <div className="contact-item">
-                <a href="https://macreat.com" className="contact-icon">🌐</a>
+                <a href="/" className="contact-icon">🌐</a>
                 <h4>Website</h4>
                 <a href="/">macreat.com</a>
               </div>

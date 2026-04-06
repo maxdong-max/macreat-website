@@ -358,6 +358,8 @@ export async function getStaticPaths() {
     'sawdust-pellets-production-line',
     'palm-efb-pellet-production-line',
     'plywood-waste-pellet-making-solution',
+    'furniture-scraps-pellet-production-solution',
+    'peanut-shell-pelletizing-solution',
   ];
   const locales = ['en', 'zh', 'id'];
   

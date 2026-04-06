@@ -45,7 +45,7 @@ export default function Home() {
         <link rel="alternate" hrefLang="en" href="/" />
         <link rel="alternate" hrefLang="zh" href="/zh" />
         <link rel="alternate" hrefLang="id" href="/id" />
-        <link rel="canonical" href="https://macreat.com/" />
+        <link rel="canonical" href="/" />
       </Head>
 
       <Header />

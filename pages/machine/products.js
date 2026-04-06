@@ -17,7 +17,7 @@ export default function Products() {
         <meta name="description" content="Browse our range of pellet machines including biomass pellet machines, hammer mills, wood chippers, and more." />
         <meta property="og:title" content="Machines - Macreat Biomass Pellet Machine" />
         <meta property="og:type" content="website" />
-        <link rel="canonical" href="https://macreat.com/machine/products/" />
+        <link rel="canonical" href="/machine/products/" />
       </Head>
 
       <Header />
