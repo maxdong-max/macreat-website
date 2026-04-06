@@ -3,13 +3,13 @@ import Script from 'next/script';
 import Head from 'next/head';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import AnalyticsTracker from '../components/AnalyticsTracker';
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
   
   useEffect(() => {
     const handleRouteChange = (url) => {
-      // Refresh on route change to avoid cached images
       window.location.reload();
     };
     
@@ -37,6 +37,7 @@ function MyApp({ Component, pageProps }) {
         `}
       </Script>
       <Component {...pageProps} />
+      <AnalyticsTracker />
     </>
   );
 }

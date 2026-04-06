@@ -1,66 +1,117 @@
-import { useEffect } from 'react';
-import { useRouter } from 'next/router';
+'use client';
+
+import { useEffect, useRef, useCallback } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 
 export default function AnalyticsTracker() {
+  const pathname = usePathname();
   const router = useRouter();
+  const startTime = useRef(Date.now());
+  const currentPath = useRef(pathname);
 
+  // 发送追踪数据
+  const track = useCallback(async (type, data = {}) => {
+    try {
+      await fetch('/api/track', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type,
+          path: currentPath.current,
+          timestamp: Date.now(),
+          ...data
+        })
+      });
+    } catch (e) {
+      // 静默失败，不影响用户体验
+    }
+  }, []);
+
+  // 追踪页面访问
   useEffect(() => {
-    // 获取访客信息
-    const getVisitorInfo = async () => {
-      try {
-        // 简单设备检测
-        const userAgent = navigator.userAgent;
-        let device = 'Desktop';
-        let os = 'Unknown';
-        
-        if (/mobile/i.test(userAgent)) {
-          device = 'Mobile';
-        } else if (/tablet|iPad/i.test(userAgent)) {
-          device = 'Tablet';
-        }
-        
-        if (/Windows/i.test(userAgent)) os = 'Windows';
-        else if (/Mac/i.test(userAgent)) os = 'macOS';
-        else if (/Linux/i.test(userAgent)) os = 'Linux';
-        else if (/Android/i.test(userAgent)) os = 'Android';
-        else if (/iOS|iPhone|iPad/i.test(userAgent)) os = 'iOS';
-        
-        const browser = /Chrome/i.test(userAgent) ? 'Chrome' 
-          : /Safari/i.test(userAgent) ? 'Safari' 
-          : /Firefox/i.test(userAgent) ? 'Firefox' 
-          : /Edge/i.test(userAgent) ? 'Edge' : 'Other';
-        
-        // 发送追踪数据
-        await fetch('/api/track', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            ip: '', // 服务器端获取
-            country: '', // 服务器端获取
-            city: '',
-            device,
-            os,
-            browser,
-            url: window.location.pathname,
-            referer: document.referrer || ''
-          })
-        });
-      } catch (e) {
-        // 静默失败，不影响用户体验
+    if (pathname !== currentPath.current) {
+      // 记录上一页停留时间
+      const stayDuration = Math.round((Date.now() - startTime.current) / 1000);
+      if (stayDuration > 0) {
+        track('stay', { stayDuration });
+      }
+      
+      // 新页面访问
+      currentPath.current = pathname;
+      startTime.current = Date.now();
+      track('pageview', { referrer: document.referrer });
+    }
+  }, [pathname, track]);
+
+  // 追踪社交媒体点击
+  useEffect(() => {
+    const handleClick = (e) => {
+      const anchor = e.target.closest('a');
+      if (!anchor) return;
+      
+      const href = anchor.href || '';
+      const text = anchor.textContent?.toLowerCase() || '';
+      
+      if (href.includes('whatsapp') || text.includes('whatsapp')) {
+        track('click', { clickType: 'whatsapp' });
+      } else if (href.includes('mailto:') || text.includes('email')) {
+        track('click', { clickType: 'email' });
+      } else if (href.includes('facebook') || text.includes('facebook')) {
+        track('click', { clickType: 'facebook' });
+      } else if (href.includes('youtube') || text.includes('youtube')) {
+        track('click', { clickType: 'youtube' });
+      } else if (href.includes('instagram') || text.includes('instagram')) {
+        track('click', { clickType: 'instagram' });
+      } else if (href.includes('twitter') || href.includes('x.com') || text === 'x') {
+        track('click', { clickType: 'twitter' });
+      } else if (href.includes('api.whatsapp')) {
+        track('click', { clickType: 'whatsapp' });
       }
     };
 
-    // 页面加载时执行
-    getVisitorInfo();
+    document.addEventListener('click', handleClick);
+    return () => document.removeEventListener('click', handleClick);
+  }, [track]);
 
-    // 路由变化时追踪
-    const handleRouteChange = (url) => {
-      getVisitorInfo();
+  // 追踪表单提交
+  useEffect(() => {
+    const handleSubmit = (e) => {
+      const form = e.target;
+      if (!form) return;
+      
+      const action = form.action || '';
+      if (action.includes('/api/contact')) {
+        const formData = new FormData(form);
+        track('form', {
+          formData: {
+            country: formData.get('country'),
+            hasMessage: !!formData.get('message')
+          }
+        });
+      }
     };
 
-    router.events.on('routeChangeComplete', handleRouteChange);
-    return () => router.events.off('routeChangeComplete', handleRouteChange);
-  }, [router.events]);
+    document.addEventListener('submit', handleSubmit);
+    return () => document.removeEventListener('submit', handleSubmit);
+  }, [track]);
+
+  // 页面离开时记录最后停留时间
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      const stayDuration = Math.round((Date.now() - startTime.current) / 1000);
+      if (stayDuration > 0) {
+        navigator.sendBeacon('/api/track', JSON.stringify({
+          type: 'stay',
+          path: currentPath.current,
+          stayDuration,
+          timestamp: Date.now()
+        }));
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, []);
 
   return null;
 }
