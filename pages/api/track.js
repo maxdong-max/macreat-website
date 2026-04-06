@@ -1,7 +1,7 @@
 /**
- * 访问追踪 API (Upstash Redis 持久化)
+ * 访问追踪 API (Upstash Redis 持久化 - Direct HTTP)
  */
-import { getRedis } from '../../lib/redis';
+import { redis } from '../../lib/redis';
 
 function getClientIp(req) {
   return req.headers['x-forwarded-for']?.split(',')[0]?.trim() ||
@@ -14,31 +14,19 @@ const ANALYTICS_KEY = 'analytics:sessions';
 
 async function getAnalytics() {
   try {
-    const client = getRedis();
-    if (!client) {
-      console.log('Redis client not available');
-      return [];
-    }
-    const data = await client.get(ANALYTICS_KEY);
-    console.log('Redis get result:', data ? 'has data' : 'null');
-    return data || [];
+    const data = await redis.get(ANALYTICS_KEY);
+    return data ? JSON.parse(data) : [];
   } catch (e) {
-    console.error('Redis get error:', e);
+    console.error('Get analytics error:', e);
     return [];
   }
 }
 
 async function saveAnalytics(data) {
   try {
-    const client = getRedis();
-    if (!client) {
-      console.log('Redis client not available for save');
-      return;
-    }
-    await client.set(ANALYTICS_KEY, JSON.stringify(data));
-    console.log('Redis set success, data length:', data.length);
+    await redis.set(ANALYTICS_KEY, JSON.stringify(data));
   } catch (e) {
-    console.error('Redis set error:', e);
+    console.error('Save analytics error:', e);
   }
 }
 
@@ -59,7 +47,6 @@ export default async function handler(req, res) {
     } = req.body;
 
     const analytics = await getAnalytics();
-    console.log('Current analytics count:', analytics.length);
     
     let session = analytics.find(a => 
       a.ip === ip && 
@@ -135,7 +122,6 @@ export default async function handler(req, res) {
       session.lastActive = timestamp;
     }
     
-    // 标记不活跃的会话
     analytics.forEach(a => {
       if (a.status === 'active' && (Date.now() - a.lastActive) > 30 * 60 * 1000) {
         a.status = 'inactive';
