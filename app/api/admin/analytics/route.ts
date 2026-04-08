@@ -64,7 +64,7 @@ export async function GET(req: NextRequest) {
     // 计算汇总统计
     const totalVisits = filteredAnalytics.length;
     const totalPageViews = logs.length;
-    const uniqueIps = [...new Set(filteredAnalytics.map((a: any) => a.ip))].length;
+    const uniqueIps = Array.from(new Set(filteredAnalytics.map((a: any) => a.ip))).length;
     
     const avgStayDuration = Math.round(
       filteredAnalytics.reduce((sum: number, a: any) => {
