@@ -1,13 +1,24 @@
 import { NextRequest, NextResponse } from "next/server"
 import jwt, { JwtPayload } from "jsonwebtoken"
-import { db } from "@/lib/db"
+import { redis } from "@/lib/redis"
 
 const JWT_SECRET = process.env.JWT_SECRET || "macreat-admin-secret-2024"
+const ANALYTICS_KEY = 'analytics:sessions'
 
 function authMiddleware(req: NextRequest) {
   const token = req.headers.get("authorization")?.replace("Bearer ", "")
   if (!token) return null
   try { const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload; return decoded as { username: string } } catch { return null }
+}
+
+async function getAnalytics() {
+  try {
+    const data = await redis.get(ANALYTICS_KEY);
+    return data || [];
+  } catch (e) {
+    console.error('Get analytics error:', e);
+    return [];
+  }
 }
 
 export async function GET(req: NextRequest) {
@@ -18,83 +29,117 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url)
     const days = parseInt(searchParams.get("days") || "7")
     
-    const since = new Date()
-    since.setDate(since.getDate() - days)
+    const analytics = await getAnalytics()
+    const cutoff = Date.now() - days * 24 * 60 * 60 * 1000
     
-    // 获取日志数据
-    const logs = db.prepare(`
-      SELECT path, ip, created_at, browser, os, device, language, timezone,
-             referrer, source, medium, campaign, search_engine, stay_duration
-      FROM analytics 
-      WHERE created_at >= ? 
-      ORDER BY created_at DESC 
-      LIMIT 1000
-    `).all(since.toISOString()) as { ip: string; stay_duration?: number; [key: string]: any }[]
+    const filteredAnalytics = (analytics as any[]).filter(a => a.firstVisit >= cutoff)
     
-    // 计算统计数据
-    const totalVisits = logs.length
-    const uniqueIps = new Set(logs.map(l => l.ip)).size
+    // 构建详细日志
+    const logs: any[] = []
+    filteredAnalytics.forEach(session => {
+      session.pages?.forEach((page: any) => {
+        if (page.timestamp >= cutoff) {
+          logs.push({
+            path: page.path,
+            ip: session.ip,
+            created_at: new Date(page.timestamp).toISOString(),
+            stay_duration: page.stayDuration,
+            browser: session.browser,
+            os: session.os,
+            device: session.device,
+            language: session.language,
+            timezone: session.timezone,
+            referrer: session.referrer,
+            source: session.source,
+            medium: session.medium,
+            campaign: session.campaign,
+            search_engine: session.searchEngine
+          });
+        }
+      });
+    });
     
-    const stayDurations = logs.map(l => l.stay_duration || 0).filter(d => d > 0)
-    const avgStayDuration = stayDurations.length > 0 
-      ? Math.round(stayDurations.reduce((a, b) => a + b, 0) / stayDurations.length)
-      : 0
+    logs.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
     
-    // 跳出率（单页访问）
-    const bounceRate = totalVisits > 0 
-      ? Math.round((logs.filter(l => (l.stay_duration || 0) < 10).length / totalVisits) * 100)
-      : 0
+    // 计算汇总统计
+    const totalVisits = filteredAnalytics.length;
+    const totalPageViews = logs.length;
+    const uniqueIps = [...new Set(filteredAnalytics.map((a: any) => a.ip))].length;
+    
+    const avgStayDuration = Math.round(
+      filteredAnalytics.reduce((sum: number, a: any) => {
+        const totalStay = a.pages?.reduce((s: number, p: any) => s + (p.stayDuration || 0), 0) || 0;
+        return sum + totalStay;
+      }, 0) / (filteredAnalytics.length || 1)
+    );
+    
+    // 点击统计
+    const clickStats: Record<string, number> = {
+      whatsapp: filteredAnalytics.reduce((sum: number, a: any) => sum + (a.clicks?.filter((c: any) => c.clickType === 'whatsapp').length || 0), 0),
+      email: filteredAnalytics.reduce((sum: number, a: any) => sum + (a.clicks?.filter((c: any) => c.clickType === 'email').length || 0), 0),
+      facebook: filteredAnalytics.reduce((sum: number, a: any) => sum + (a.clicks?.filter((c: any) => c.clickType === 'facebook').length || 0), 0),
+      youtube: filteredAnalytics.reduce((sum: number, a: any) => sum + (a.clicks?.filter((c: any) => c.clickType === 'youtube').length || 0), 0),
+      instagram: filteredAnalytics.reduce((sum: number, a: any) => sum + (a.clicks?.filter((c: any) => c.clickType === 'instagram').length || 0), 0),
+      twitter: filteredAnalytics.reduce((sum: number, a: any) => sum + (a.clicks?.filter((c: any) => c.clickType === 'twitter').length || 0), 0),
+    };
+    
+    // 表单统计
+    const formSubmits = filteredAnalytics.reduce((sum: number, a: any) => sum + (a.forms?.length || 0), 0);
     
     // 来源统计
-    const trafficSources: Record<string, number> = {}
-    const trafficMediums: Record<string, number> = {}
-    const searchEngines: Record<string, number> = {}
-    const browsers: Record<string, number> = {}
-    const operatingSystems: Record<string, number> = {}
-    const devices: Record<string, number> = {}
-    const languages: Record<string, number> = {}
-    const timezones: Record<string, number> = {}
-    const topCountries: Record<string, number> = {}
-    const topPages: { path: string; count: number }[] = []
-    const pageCounts: Record<string, number> = {}
+    const trafficSources: Record<string, number> = {};
+    const trafficMediums: Record<string, number> = {};
+    const searchEngines: Record<string, number> = {};
+    const browsers: Record<string, number> = {};
+    const operatingSystems: Record<string, number> = {};
+    const devices: Record<string, number> = {};
+    const languages: Record<string, number> = {};
+    const timezones: Record<string, number> = {};
+    const topCountries: Record<string, number> = {};
+    const pageCounts: Record<string, number> = {};
     
-    logs.forEach(l => {
-      if (l.source) trafficSources[l.source] = (trafficSources[l.source] || 0) + 1
-      if (l.medium) trafficMediums[l.medium] = (trafficMediums[l.medium] || 0) + 1
-      if (l.search_engine) searchEngines[l.search_engine] = (searchEngines[l.search_engine] || 0) + 1
-      if (l.browser) browsers[l.browser] = (browsers[l.browser] || 0) + 1
-      if (l.os) operatingSystems[l.os] = (operatingSystems[l.os] || 0) + 1
-      if (l.device) devices[l.device] = (devices[l.device] || 0) + 1
-      if (l.language) languages[l.language] = (languages[l.language] || 0) + 1
-      if (l.timezone) timezones[l.timezone] = (timezones[l.timezone] || 0) + 1
+    filteredAnalytics.forEach((a: any) => {
+      const source = a.source || 'direct';
+      trafficSources[source] = (trafficSources[source] || 0) + 1;
       
-      if (l.path) {
-        pageCounts[l.path] = (pageCounts[l.path] || 0) + 1
+      const medium = a.medium || 'none';
+      trafficMediums[medium] = (trafficMediums[medium] || 0) + 1;
+      
+      if (a.searchEngine) {
+        searchEngines[a.searchEngine] = (searchEngines[a.searchEngine] || 0) + 1;
       }
-    })
+      if (a.browser) browsers[a.browser] = (browsers[a.browser] || 0) + 1;
+      if (a.os) operatingSystems[a.os] = (operatingSystems[a.os] || 0) + 1;
+      if (a.device) devices[a.device] = (devices[a.device] || 0) + 1;
+      if (a.language) languages[a.language] = (languages[a.language] || 0) + 1;
+      if (a.timezone) timezones[a.timezone] = (timezones[a.timezone] || 0) + 1;
+      
+      a.forms?.forEach((f: any) => {
+        if (f.country) {
+          topCountries[f.country] = (topCountries[f.country] || 0) + 1;
+        }
+      });
+      
+      a.pages?.forEach((p: any) => {
+        pageCounts[p.path] = (pageCounts[p.path] || 0) + 1;
+      });
+    });
     
     // 热门页面
-    Object.entries(pageCounts)
+    const topPages = Object.entries(pageCounts)
       .sort((a, b) => b[1] - a[1])
       .slice(0, 10)
-      .forEach(([path, count]) => {
-        topPages.push({ path, count })
-      })
+      .map(([path, count]) => ({ path, count }));
     
-    // 点击统计（从 click_type 字段）
-    const clickStats: Record<string, number> = {}
-    logs.forEach(l => {
-      if (l.click_type) {
-        clickStats[l.click_type] = (clickStats[l.click_type] || 0) + 1
-      }
-    })
-    
-    // 表单提交（暂时没有专门字段，设为0）
-    const formSubmits = 0
+    // 跳出率
+    const bounceRate = Math.round(
+      filteredAnalytics.filter((a: any) => a.pages?.length === 1).length / 
+      (filteredAnalytics.length || 1) * 100
+    );
     
     const summary = {
       totalVisits,
-      totalPageViews: totalVisits,
+      totalPageViews,
       uniqueIps,
       avgStayDuration,
       bounceRate,
@@ -110,9 +155,9 @@ export async function GET(req: NextRequest) {
       languages,
       timezones,
       topCountries
-    }
+    };
     
-    return NextResponse.json({ logs, summary })
+    return NextResponse.json({ logs: logs.slice(0, 500), summary })
   } catch (err) {
     console.error('Analytics API error:', err)
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
