@@ -59,7 +59,7 @@ export async function GET(req: NextRequest) {
       });
     });
     
-    logs.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    logs.sort((a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
     
     // 计算汇总统计
     const totalVisits = filteredAnalytics.length;
