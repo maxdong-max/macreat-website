@@ -53,6 +53,24 @@ export default function Home() {
       <Header />
 
       <main id="main">
+        {/* DEBUG: Absolute Top Placement to ensure visibility */}
+        <div style={{ 
+          backgroundColor: '#2ecc71', 
+          color: 'white', 
+          textAlign: 'center', 
+          padding: '20px', 
+          fontSize: '1.2rem', 
+          fontWeight: 'bold', 
+          zIndex: 9999, 
+          position: 'relative',
+          borderBottom: '4px solid #27ae60'
+        }}>
+          Not sure which machine fits your specific material? 
+          <Link href="/solution" style={{ marginLeft: '15px', textDecoration: 'underline', color: 'white' }}>
+            ➔ Try Smart Configuration Guide
+          </Link>
+        </div>
+
         <HeroSection hero={hero} />
 
         {/* Smart Configurator Quick Access */}
